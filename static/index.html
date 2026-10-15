@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Wohnung Scout — Würzburg</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header><a class="brand" href="/">w<span>↗</span> wohnung scout</a><span class="city">WÜRZBURG, DE</span><span id="connection">Loading…</span></header>
+  <main>
+    <section class="intro"><div><p class="eyebrow">MORE SPACE. LESS RENT.</p><h1>Find your<br><em>better place.</em></h1><p class="lede">See what your money can buy in Würzburg.<br>Choose your limits after you see the market.</p></div><aside><span class="label">YOUR CURRENT MONTHLY COST</span><strong id="current">—</strong><p>Enter your total, including utilities.<br>New apartment costs need checking.</p><a href="#preferences">Adjust your comparison ↗</a></aside></section>
+    <div id="notice" role="status" aria-live="polite"></div>
+    <section class="market"><div class="section-head"><div><p class="eyebrow">01 / THE MARKET</p><h2>What does good value look like?</h2></div><button id="refresh">Check for apartments ↻</button></div>
+      <div class="metrics"><div><span>Current listings in this sample</span><strong id="count">—</strong></div><div><span>Median listed rent</span><strong id="median-rent">—</strong></div><div><span>Median apartment size</span><strong id="median-size">—</strong></div><div><span>Median listed rent / m²</span><strong id="median-rate">—</strong></div></div>
+      <div class="chart-layout"><div class="chart-wrap"><div class="chart-top"><span>MONTHLY LISTED RENT (€)</span><span><i class="dot"></i> Below your estimated budget</span></div><svg id="chart" viewBox="0 0 760 380" role="img" aria-label="Apartment size versus listed monthly rent"></svg><p class="caption">Each dot is an apartment. Click one to see it. The line shows your budget minus your extra-cost reserve.</p></div><aside class="chart-notes"><h3>Look down.<br>Look right.</h3><p>Lower dots cost less.<br>Dots further right give you more space.</p><div class="tip"><strong>“Good value” is relative.</strong><p>A listing gets this label when its rent / m² is at least 10% below the median of similar-sized homes.</p></div><p class="small">At least 3 other homes within ±25% of its size are needed. Location, condition, and utility differences still matter.</p></aside></div>
+      <div id="size-bands" class="bands"></div>
+      <p class="caption">A snapshot of the first WG-Gesucht results pages for studios and apartments. Asking rents, not signed leases. Temporary lets excluded from market statistics. No full-market or availability guarantee.</p>
+    </section>
+    <section id="preferences" class="preferences"><div><p class="eyebrow">02 / YOUR COMPARISON</p><h2>Try a different budget.</h2><p>These limits control your shortlist and Telegram alerts.<br>The market chart still shows the wider sample.</p></div><form id="settings"><div class="inputs"><label>Maximum estimated total / month (€)<input name="budget" type="number" min="1" max="10000" required></label><label>Minimum size (m²)<input name="min_size" type="number" min="1" max="500" required></label><label>Extra-cost reserve / month (€)<input name="extra_costs" type="number" min="0" max="1000" required></label><label>Your current total / month (€)<input name="current_total" type="number" min="1" max="10000" required></label></div><div class="form-bottom"><label class="check"><input name="include_temporary" type="checkbox"> Include temporary lets in alerts</label><button class="primary" type="submit">Save limits →</button></div><p class="small">Estimated total = listed rent + your reserve. The €60 starting reserve is a placeholder, not a utility quote. Confirm heating, water, electricity, and internet with the landlord.</p></form></section>
+    <section><div class="section-head"><div><p class="eyebrow">03 / THE APARTMENTS</p><h2>Your next possibilities.</h2></div><label class="sort-label">Sort by <select id="sort"><option value="saving">Estimated savings</option><option value="value">Value for size</option><option value="size">Largest first</option><option value="new">Recently found</option></select></label></div><div class="tabs" role="group" aria-label="Filter listings"><button class="active" data-filter="matches">Within my limits</button><button data-filter="all">All current listings</button><button data-filter="saved">Saved</button><button data-filter="hidden">Hidden</button></div><div id="listings" class="listings" aria-live="polite"><p>Collecting the first apartments…</p></div></section>
+    <section class="telegram"><div class="telegram-mark">↗</div><div><p class="eyebrow">04 / GET THERE EARLY</p><h2>New matches, straight to Telegram.</h2><p id="telegram-status">Connect your bot to receive new matches.</p><p class="small">Up to 5 unnotified matches per check. Checks run every 30 minutes while this app is running.</p></div><div><code>./scripts/setup-telegram.sh</code><p class="small">Run this in the project terminal.<br>It guides you through bot setup.</p></div></section>
+    <footer><span>wohnung scout / a little more room to live.</span><span id="last-check">Waiting for first check</span></footer>
+  </main>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
