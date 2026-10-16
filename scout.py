@@ -42,20 +42,26 @@ def parse_search(html):
     soup = BeautifulSoup(html, "html.parser")
     listings = []
     for card in soup.select(".offer_list_item[data-id]"):
-        link = card.select_one("h2 a")
-        facts = card.select_one(".middle")
-        location = card.select_one(".card_body .col-xs-11 span")
-        if not link or not facts or not location:
+        link = card if card.name == "a" else card.select_one("h2 a")
+        title_element = card.select_one(".ad-title") if card.name == "a" else link
+        facts = card.select_one(".middle, .middle-row")
+        location = card.select_one(".ad-subtitle, .card_body .col-xs-11 span")
+        if not link or not title_element or not facts or not location:
             continue
         text = facts.get_text(" ", strip=True)
-        price = re.search(r"([\d.,]+)\s*€", text)
+        price_row = card.select_one(".price-row")
+        price_text = price_row.get_text(" ", strip=True) if price_row else text
+        period = price_row.select_one(".card-subtitle") if price_row else None
+        if period and period.get_text(" ", strip=True).casefold() != "pro monat":
+            continue
+        price = re.search(r"([\d.,]+)\s*€", price_text)
         size = re.search(r"([\d.,]+)\s*m[²2]", text)
         if not price or not size:
             continue
         url = urljoin(BASE, link.get("href", ""))
         if not url.startswith(BASE + "/"):
             continue
-        title = link.get_text(" ", strip=True)
+        title = title_element.get_text(" ", strip=True)
         if nightly_stay(title):
             continue
         listings.append({"id": card["data-id"], "title": title, "url": url,

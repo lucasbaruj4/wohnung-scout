@@ -18,6 +18,14 @@ DETAIL = '''<div><span class="key_fact_detail">Gesamtmiete</span><b class="key_f
 <div class="row"><span class="section_panel_detail">Nebenkosten:</span><span class="section_panel_value">180€</span></div>
 <div class="row"><span class="section_panel_detail">Sonstige Kosten:</span><span class="section_panel_value">n.a.</span></div>
 <div class="row"><span class="section_panel_detail">frei bis:</span><span class="section_panel_value">31.12.2026</span></div>'''
+MODERN_SEARCH = '''<a class="wgg-list-card offer_list_item" data-id="789"
+href="/wohnungen-in-Wuerzburg.789.html">
+<div class="card-content"><div class="price-row"><div>
+<span class="card-main-text">730 €</span><span class="card-subtitle">pro Monat</span></div></div>
+<h2><span class="ad-title">Sunny flat</span></h2>
+<div class="ad-subtitle"><span>Wohnung · Würzburg Altstadt · Example street</span></div>
+<div class="middle-row"><div><span class="size-value">55 m²</span></div><div>01.11.2026</div></div>
+</div></a>'''
 
 
 class ScoutTests(unittest.TestCase):
@@ -31,6 +39,18 @@ class ScoutTests(unittest.TestCase):
         row = parse_search(SEARCH)[0]
         self.assertEqual((row["rent"], row["size"], row["id"]), (730, 55, "123"))
         self.assertTrue(row["url"].startswith("https://www.wg-gesucht.de/"))
+
+    def test_modern_anchor_cards_keep_price_size_location_and_date(self):
+        row = parse_search(MODERN_SEARCH)[0]
+        self.assertEqual((row["id"], row["rent"], row["size"]), ("789", 730, 55))
+        self.assertEqual(row["title"], "Sunny flat")
+        self.assertIn("Würzburg Altstadt", row["location"])
+        self.assertEqual(row["available"], "01.11.2026")
+
+    def test_modern_nightly_prices_are_excluded_even_with_generic_titles(self):
+        nightly = MODERN_SEARCH.replace('data-id="789"', 'data-id="790"').replace('pro Monat', 'pro Nacht')
+        rows = parse_search(MODERN_SEARCH + nightly)
+        self.assertEqual([r["id"] for r in rows], ["789"])
 
     def test_unknown_charges_and_temporary_lets_are_not_fabricated(self):
         row = parse_detail(DETAIL, parse_search(SEARCH)[0])
