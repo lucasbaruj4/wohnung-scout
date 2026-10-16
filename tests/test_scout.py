@@ -7,7 +7,7 @@ import requests
 
 from app import create_app
 from scout import Collector, DEFAULTS, Store, evaluate, number, parse_detail, parse_search, validate_settings
-from telegram_alerts import call
+from telegram_alerts import call, is_configured
 
 SEARCH = '''<div class="offer_list_item" data-id="123">
 <div class="card_body"><h2><a href="/wohnungen-in-Wuerzburg.123.html">Sunny flat</a></h2>
@@ -137,6 +137,28 @@ class ScoutTests(unittest.TestCase):
             with self.assertRaises(RuntimeError) as error:
                 call(token, "getMe")
         self.assertNotIn(token, str(error.exception))
+
+    def test_telegram_configuration_requires_both_values_and_returns_boolean(self):
+        for token, chat_id, expected in [("", "", False), ("test-token", "", False),
+                                         ("", "test-chat", False), ("test-token", "test-chat", True)]:
+            with self.subTest(token_present=bool(token), chat_present=bool(chat_id)):
+                with patch("telegram_alerts.ROOT", Path(self.temp.name)), patch.dict(
+                    "os.environ", {"TELEGRAM_BOT_TOKEN": token, "TELEGRAM_CHAT_ID": chat_id}
+                ):
+                    self.assertIs(is_configured(), expected)
+
+    def test_api_reports_telegram_configuration_without_credentials(self):
+        client = create_app(self.store, Collector(self.store)).test_client()
+        token = "123:" + "x" * 30
+        chat_id = "private-chat-test"
+        with patch("telegram_alerts.ROOT", Path(self.temp.name)), patch.dict(
+            "os.environ", {"TELEGRAM_BOT_TOKEN": token, "TELEGRAM_CHAT_ID": chat_id}
+        ):
+            response = client.get("/api/state")
+        self.assertEqual(response.status_code, 200)
+        self.assertIs(response.get_json()["telegram_connected"], True)
+        for value in (token, chat_id, "TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID"):
+            self.assertNotIn(value, response.get_data(as_text=True))
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from flask import Flask, jsonify, request, send_from_directory
 
 from scout import Collector, Store, evaluate, validate_settings
-from telegram_alerts import credentials, notify
+from telegram_alerts import is_configured, notify
 
 ROOT = Path(__file__).resolve().parent
 
@@ -35,7 +35,7 @@ def create_app(store, collector):
         return jsonify(settings=settings, listings=evaluate(store.rows(), settings),
                        last_check=store.get("last_check"), last_success=store.get("last_success"),
                        errors=store.get("errors", []), scanning=collector.lock.locked(),
-                       telegram_connected=all(credentials().values()), telegram_error=store.get("telegram_error"),
+                       telegram_connected=is_configured(), telegram_error=store.get("telegram_error"),
                        source="WG-Gesucht · first page of studios and apartments", interval_minutes=30)
 
     @app.post("/api/settings")

@@ -47,16 +47,17 @@ Each scan enriches at most 12 previously unchecked listings, prioritizing afford
 ## Verify
 
 ```bash
-.venv/bin/python -m unittest discover -s tests -v
-bash -n scripts/start.sh scripts/setup-telegram.sh
-./scripts/check-secrets.sh
-.venv/bin/python app.py --once
+./scripts/check.sh
 ```
 
-CI runs parser, cost comparison, deduplication, delivery retry, source-failure, settings, and token-redaction tests. Tests use synthetic HTML matching the source structure, not copied listing data. A live collection is a separate manual check because external pages can change.
+This command runs behavior tests, module-boundary checks, shell syntax checks, and secret scans. CI runs the same command. The secret check downloads a pinned, checksum-verified Gitleaks release from its official repository. It scans all fetched Git history, the Git index, and publishable working-tree files, including non-ignored new files. Ignored local credentials and listing data stay outside those snapshots. Run `./scripts/start.sh` once to install dependencies before checking locally.
 
-CI also rejects tracked credential/database files and scans the complete Git history with checksum-verified Gitleaks. The scanner downloads a pinned release from its official GitHub repository. Local credentials and listing data belong only in ignored files.
+The boundary checks reject unregistered production Python modules, imports that reverse the module dependencies, and database, HTTP, or HTML-library imports outside their owners. Tests use synthetic HTML rather than copied listing data. A live collection remains a separate check because external pages can change. `app.py --once` also sends pending Telegram alerts when credentials are configured.
 
 ## Code ownership
 
-`scout.py` owns collection, SQLite history, settings validation, and comparisons. `telegram_alerts.py` owns Telegram credentials and requests. `app.py` owns the local HTTP interface and schedule. `static/` owns the dashboard. `tests/` and CI provide the normal checks. Runtime data in `data/`, the virtual environment, and credentials stay untracked. The server binds to loopback; do not expose this personal dashboard publicly without adding authentication and a production server.
+`app.py` owns the local HTTP interface and process schedule. It asks Telegram for a configuration boolean, so the HTTP layer does not receive bot credentials. `scout.py` owns collection, SQLite history, settings validation, and comparisons. It receives a notifier callback rather than importing the Telegram adapter. `telegram_alerts.py` owns credentials, pairing, and Telegram requests. `static/` owns the dashboard.
+
+Keep these three Python modules while their responsibilities remain small. Splitting source parsing, comparisons, and storage into more modules would add navigation without removing a current duplicate owner. `tests/test_architecture.py` records the allowed dependencies and checks newly added production modules. Change that contract deliberately when a new responsibility needs its own owner.
+
+Runtime data in `data/`, the virtual environment, and credentials stay untracked. The server binds to loopback. The dashboard opens on the computer running it; Telegram delivers alerts on your phone. Keep the computer awake and the app running. GitHub does not run the collector. Add authentication and a production server before exposing the dashboard publicly.

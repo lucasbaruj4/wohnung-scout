@@ -1,4 +1,7 @@
 ## 2026-10-16
+- Added module ownership checks and a shared local/CI verification command.
+- Kept raw Telegram credentials out of the HTTP layer.
+- Extended secret scans to staged, edited, and non-ignored new files.
 - Restored collection for the updated WG-Gesucht listing cards while keeping support for the previous layout.
 - Added tests for the new cards and excluded nightly prices shown outside the title.
 

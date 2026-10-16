@@ -22,6 +22,10 @@ def credentials():
     return {key: os.environ.get(key, values.get(key, "")) for key in ("TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID")}
 
 
+def is_configured() -> bool:
+    return all(credentials().values())
+
+
 def call(token, method, data=None):
     if not re.fullmatch(r"\d+:[A-Za-z0-9_-]{20,}", token):
         raise RuntimeError("The bot token format is invalid. Copy the token from BotFather.")
