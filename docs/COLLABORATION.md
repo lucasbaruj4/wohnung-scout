@@ -1,4 +1,5 @@
 ## 2026-10-16
+- Agent 428 | Problem: Keep the Windows startup helper hidden | Scope: startup script and docs - DONE
 - Agent 428 | Problem: Publish checks, compare UI options, and run locally as a service | Scope: runtime scripts, docs, isolated UI branch - DONE
 - Agent 428 | Problem: Harden module ownership and secret checks | Scope: source, scripts, tests, CI, guidance - DONE
 - Agent 429 | Problem: Compare architecture options | Scope: read-only source analysis - DONE

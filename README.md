@@ -44,7 +44,7 @@ systemctl --user stop wohnung-scout.service
 systemctl --user start wohnung-scout.service
 ```
 
-The hidden Windows task starts WSL at Windows sign-in. It starts the service and keeps a foreground sleep process alive. [Systemd alone does not keep WSL running](https://learn.microsoft.com/en-us/windows/wsl/systemd). The task does not prevent Windows sleep. The computer must stay awake, powered on, and online for successful checks. This setup has no cloud component.
+The Windows task uses a windowless script host to start WSL at Windows sign-in. It starts the service and keeps a foreground sleep process alive. [Systemd alone does not keep WSL running](https://learn.microsoft.com/en-us/windows/wsl/systemd). The task does not prevent Windows sleep. The computer must stay awake, powered on, and online for successful checks. This setup has no cloud component.
 
 Manage the optional task from Windows PowerShell:
 
@@ -54,14 +54,14 @@ Stop-ScheduledTask -TaskName 'Wohnung Scout'
 Start-ScheduledTask -TaskName 'Wohnung Scout'
 ```
 
-Stopping the task stops its WSL keeper. Use the Linux service stop command to stop the collector too. Starting the task starts both again.
+Use the Linux service stop command to stop the collector. Stopping the Windows task alone can leave its WSL keeper running. Starting the task starts the service again.
 
 To remove automatic startup, stop and unregister the Windows task in PowerShell:
 
 ```powershell
 Stop-ScheduledTask -TaskName 'Wohnung Scout'
 Unregister-ScheduledTask -TaskName 'Wohnung Scout' -Confirm:$false
-Remove-Item "$env:LOCALAPPDATA\WohnungScout\keep-running.ps1"
+Remove-Item "$env:LOCALAPPDATA\WohnungScout\keep-running.ps1", "$env:LOCALAPPDATA\WohnungScout\keep-running.vbs"
 ```
 
 Then remove the service from Linux:
