@@ -1,4 +1,6 @@
 ## 2026-10-16
+- Added a restartable local service and an optional hidden Windows logon task that keeps WSL alive while Windows is awake.
+- Preserved the 30-minute check interval across app restarts and blocked overlapping collector processes.
 - Added module ownership checks and a shared local/CI verification command.
 - Kept raw Telegram credentials out of the HTTP layer.
 - Extended secret scans to staged, edited, and non-ignored new files.

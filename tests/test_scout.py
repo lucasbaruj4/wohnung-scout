@@ -1,11 +1,16 @@
 import tempfile
+import fcntl
+import sys
 import unittest
+import importlib.util
+import subprocess
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import patch
 
 import requests
 
-from app import create_app
+from app import create_app, initial_scan_delay
 from scout import Collector, DEFAULTS, Store, evaluate, number, parse_detail, parse_search, validate_settings
 from telegram_alerts import call, is_configured
 
@@ -33,6 +38,34 @@ class ScoutTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.store = Store(Path(self.temp.name) / "scout.db")
+
+    def test_second_collector_exits_before_opening_database(self):
+        root = Path(self.temp.name)
+        data = root / "data"
+        data.mkdir()
+        with (data / "collector.lock").open("a") as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            result = subprocess.run([
+                sys.executable, "-c",
+                "import app, pathlib, sys; app.ROOT=pathlib.Path(sys.argv[1]); "
+                "sys.argv=['app.py', '--once']; app.main()", str(root),
+            ], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("A collector is already running", result.stderr)
+        self.assertFalse((data / "scout.sqlite3").exists())
+
+    def test_restart_waits_for_remaining_check_interval(self):
+        now = datetime(2026, 10, 16, 12, tzinfo=timezone.utc)
+        self.assertEqual(initial_scan_delay((now - timedelta(minutes=5)).isoformat(), now), 1500)
+        self.assertEqual(initial_scan_delay((now - timedelta(minutes=30)).isoformat(), now), 0)
+        self.assertEqual(initial_scan_delay((now - timedelta(hours=1)).isoformat(), now), 0)
+
+    def test_initial_check_handles_missing_invalid_and_future_timestamps(self):
+        now = datetime(2026, 10, 16, 12, tzinfo=timezone.utc)
+        for last in (None, "", "invalid", "2026-10-16T12:00:00"):
+            with self.subTest(last=last):
+                self.assertEqual(initial_scan_delay(last, now), 0)
+        self.assertEqual(initial_scan_delay((now + timedelta(hours=1)).isoformat(), now), 1800)
 
     def test_german_prices_and_real_card_layout(self):
         self.assertEqual(number("1.250,50 €"), 1250.5)
@@ -159,6 +192,49 @@ class ScoutTests(unittest.TestCase):
         self.assertIs(response.get_json()["telegram_connected"], True)
         for value in (token, chat_id, "TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID"):
             self.assertNotIn(value, response.get_data(as_text=True))
+
+
+class ServiceInstallerTests(unittest.TestCase):
+    def test_install_and_repeat_do_not_restart_but_changed_active_unit_does(self):
+        path = Path(__file__).resolve().parents[1] / "scripts/install-service.py"
+        spec = importlib.util.spec_from_file_location("install_service", path)
+        installer = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(installer)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            python = root / ".venv/bin/python"
+            python.parent.mkdir(parents=True)
+            python.touch()
+            active = False
+
+            def run(command, **kwargs):
+                nonlocal active
+                if command[2] == "is-active":
+                    return subprocess.CompletedProcess(command, 0 if active else 3)
+                if command[2] in ("enable", "restart"):
+                    active = True
+                return subprocess.CompletedProcess(command, 0)
+
+            with patch.object(installer, "ROOT", root), patch.object(installer.Path, "home", return_value=root), \
+                    patch.object(installer.subprocess, "run", side_effect=run) as commands, \
+                    patch("sys.argv", [str(path)]), patch("builtins.print"):
+                installer.main()
+                unit = root / ".config/systemd/user/wohnung-scout.service"
+                content = unit.read_text()
+                self.assertIn("Restart=always\nRestartSec=10", content)
+                self.assertIn("UMask=0077", content)
+                self.assertIn("WantedBy=default.target", content)
+                self.assertNotIn("TELEGRAM", content)
+                self.assertFalse(any(call.args[0][2] == "restart" for call in commands.call_args_list))
+                commands.reset_mock()
+                installer.main()
+                self.assertFalse(any(call.args[0][2] in ("daemon-reload", "restart")
+                                     for call in commands.call_args_list))
+                unit.write_text(content.replace("RestartSec=10", "RestartSec=15"))
+                commands.reset_mock()
+                installer.main()
+                self.assertEqual(unit.read_text(), content)
+                self.assertEqual(sum(call.args[0][2] == "restart" for call in commands.call_args_list), 1)
 
 
 if __name__ == "__main__":
