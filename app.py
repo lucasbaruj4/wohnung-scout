@@ -1,6 +1,8 @@
 """Local dashboard. One process owns the collector and its 30-minute schedule."""
 import argparse
+import fcntl
 import threading
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -10,6 +12,19 @@ from scout import Collector, Store, evaluate, validate_settings
 from telegram_alerts import is_configured, notify
 
 ROOT = Path(__file__).resolve().parent
+
+
+def initial_scan_delay(last_check, now=None):
+    if not last_check:
+        return 0
+    try:
+        checked_at = datetime.fromisoformat(last_check)
+        if checked_at.tzinfo is None:
+            return 0
+    except (TypeError, ValueError):
+        return 0
+    elapsed = ((now or datetime.now(timezone.utc)) - checked_at).total_seconds()
+    return min(1800, max(0, 1800 - elapsed))
 
 
 def create_app(store, collector):
@@ -60,7 +75,6 @@ def create_app(store, collector):
         if collector.lock.locked():
             return jsonify(error="A check is already running."), 409
         # Prevent repeated UI clicks from hammering the source.
-        from datetime import datetime, timezone
         last = store.get("last_check")
         if last and (datetime.now(timezone.utc) - datetime.fromisoformat(last)).total_seconds() < 300:
             return jsonify(error="Checked recently. Wait five minutes before checking again."), 429
@@ -75,7 +89,14 @@ def main():
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--once", action="store_true", help="Collect once without starting the dashboard")
     args = parser.parse_args()
-    store = Store(ROOT / "data" / "scout.sqlite3")
+    data = ROOT / "data"
+    data.mkdir(exist_ok=True)
+    collector_lock = (data / "collector.lock").open("a")
+    try:
+        fcntl.flock(collector_lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        parser.exit(1, "A collector is already running. Open http://localhost:8765 or stop the existing process first.\n")
+    store = Store(data / "scout.sqlite3")
     collector = Collector(store, notify)
     if args.once:
         collector.scan()
@@ -85,6 +106,7 @@ def main():
         return
 
     def schedule():
+        threading.Event().wait(initial_scan_delay(store.get("last_check")))
         while True:
             try:
                 collector.scan()

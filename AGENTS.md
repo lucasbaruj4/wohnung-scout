@@ -25,4 +25,5 @@ The UI check in `tests/test_design.py` prevents these summaries.
 B1 is the chosen dashboard. Show only whole apartments with a private kitchen
 and bathroom. Keep WG-Gesucht's apartment categories; exclude shared-flat offers
 and shared facilities in parsing, comparisons, and alerts. Keep saved and delivery
-history intact. `tests/test_whole_apartments.py` checks this rule across rescans.
+history intact. Whole-apartment eligibility belongs in `scout.py`.
+`tests/test_whole_apartments.py` checks this rule across rescans.

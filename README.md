@@ -10,7 +10,67 @@ Requires Python 3.12+ and Bash. On Ubuntu, install `python3-venv` if needed.
 ./scripts/start.sh
 ```
 
-Open **http://localhost:8765**. The first collection starts automatically. The app checks every 30 minutes while this process is running. Closing the process, suspending the computer, or shutting down WSL pauses collection. GitHub hosts the source and runs tests; it does not run the live collector.
+Open **http://localhost:8765**. The first collection starts automatically. After a restart, the app waits until the previous check is 30 minutes old. Later checks run 30 minutes after each scan finishes. Closing the process, suspending the computer, or shutting down WSL pauses collection. GitHub hosts the source and runs tests; it does not run the live collector.
+
+## Keep the app running locally
+
+Stop any manually started app before installing the service. Run `./scripts/start.sh` once to install dependencies, then stop that process with Ctrl+C.
+
+On Linux with a running systemd user manager, install the service:
+
+```bash
+python3 scripts/install-service.py
+```
+
+On WSL, use the optional Windows logon task too:
+
+```bash
+python3 scripts/install-service.py --windows-startup
+```
+
+The service starts with the systemd user manager and restarts ten seconds after an exit. Repeating the installer leaves an unchanged running service alone. Credentials stay in the ignored `.env` file. The service and Windows task contain no credentials. The service creates new files with private permissions. A process lock prevents a second collector, including a manual `--once` run, from overlapping the service.
+
+Check the service or read its latest logs from Linux:
+
+```bash
+systemctl --user status wohnung-scout.service
+journalctl --user -u wohnung-scout.service -n 50 --no-pager
+```
+
+Stop or start the collector from Linux:
+
+```bash
+systemctl --user stop wohnung-scout.service
+systemctl --user start wohnung-scout.service
+```
+
+The Windows task uses a windowless script host to start WSL at Windows sign-in. It starts the service and keeps a foreground sleep process alive. [Systemd alone does not keep WSL running](https://learn.microsoft.com/en-us/windows/wsl/systemd). The task does not prevent Windows sleep. The computer must stay awake, powered on, and online for successful checks. This setup has no cloud component.
+
+Manage the optional task from Windows PowerShell:
+
+```powershell
+Get-ScheduledTask -TaskName 'Wohnung Scout'
+Stop-ScheduledTask -TaskName 'Wohnung Scout'
+Start-ScheduledTask -TaskName 'Wohnung Scout'
+```
+
+Use the Linux service stop command to stop the collector. Stopping the Windows task alone can leave its WSL keeper running. Starting the task starts the service again.
+
+To remove automatic startup, stop and unregister the Windows task in PowerShell:
+
+```powershell
+Stop-ScheduledTask -TaskName 'Wohnung Scout'
+Unregister-ScheduledTask -TaskName 'Wohnung Scout' -Confirm:$false
+Remove-Item "$env:LOCALAPPDATA\WohnungScout\keep-running.ps1", "$env:LOCALAPPDATA\WohnungScout\keep-running.vbs"
+```
+
+Then remove the service from Linux:
+
+```bash
+systemctl --user disable --now wohnung-scout.service
+rm ~/.config/systemd/user/wohnung-scout.service
+systemctl --user daemon-reload
+```
 
 ## Explore the market
 
