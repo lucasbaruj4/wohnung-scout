@@ -9,7 +9,7 @@ import statistics
 import threading
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlsplit
 
 import requests
 from bs4 import BeautifulSoup
@@ -36,6 +36,27 @@ def number(text):
 
 def nightly_stay(title):
     return bool(re.search(r"overnight|übernachtung|pro nacht|per night|nightly|tagesmiete", title, re.I))
+
+
+def listing_image(container, selector, page_url):
+    for image in container.select(selector):
+        for attribute in ("data-src", "data-large", "src"):
+            value = image.get(attribute, "").strip()
+            if not value or re.search(r"[\s\\]", value):
+                continue
+            try:
+                url = urljoin(page_url, value)
+                parts = urlsplit(url)
+            except ValueError:
+                continue
+            path = parts.path.replace("/./", "/")
+            if (parts.scheme == "https" and parts.netloc.lower() in
+                    {"img.wg-gesucht.de", "www.wg-gesucht.de"}
+                    and path.startswith("/media/up/") and "/../" not in path
+                    and re.search(r"\.(jpe?g|png|webp|avif)$", path, re.I)
+                    and "user_photo" not in path.casefold()):
+                return url
+    return None
 
 
 def parse_search(html):
@@ -65,6 +86,7 @@ def parse_search(html):
         if nightly_stay(title):
             continue
         listings.append({"id": card["data-id"], "title": title, "url": url,
+                         "image_url": listing_image(card, "img.top-image-card, .card_image img", url),
                          "rent": number(price[1]), "size": number(size[1]),
                          "location": " ".join(location.get_text(" ", strip=True).split()),
                          "available": " · ".join(re.findall(r"\d{2}\.\d{2}\.\d{4}", text)),
@@ -81,6 +103,7 @@ def parse_search(html):
 def parse_detail(html, listing):
     soup = BeautifulSoup(html, "html.parser")
     result = dict(listing)
+    result["image_url"] = listing_image(soup, "img.sp-image", listing["url"]) or listing.get("image_url")
     for label in soup.select(".key_fact_detail"):
         if label.get_text(strip=True) == "Gesamtmiete":
             value = label.parent.select_one(".key_fact_value")
@@ -206,6 +229,8 @@ class Collector:
             checked = 0
             for listing in prioritized:
                 old = previous.get(listing["id"])
+                if old and not listing.get("image_url"):
+                    listing["image_url"] = old.get("image_url")
                 if old and old["details_checked"] and old["rent"] == listing["rent"]:
                     for key in ("rent_basis", "base_rent", "service_costs", "other_costs", "deposit", "details_checked"):
                         listing[key] = old[key]

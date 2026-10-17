@@ -15,8 +15,10 @@ Use the bottom switcher or the left and right arrow keys to change options.
 Inputs keep their normal arrow-key behavior.
 All preview changes stay in memory. There are no write API routes.
 
-The server proxies only GET /api/state from the main app on port 8765.
-It starts no collector and reads no local credential file.
+The server proxies GET /api/state from the main app on port 8765.
+GET /api/photos reads the two public search pages and caches photo URLs in memory
+for 30 minutes. It starts no collector and reads no local credential file.
+It never changes listings, settings, saved status, or delivery history.
 If the main app is unavailable, each option labels its synthetic examples.
 
 B was selected as the direction for the next iteration. The original drafts
@@ -38,3 +40,10 @@ through the link beside it. All changes remain in browser memory.
 
 These are throwaway drafts on `prototype/comparison-refinements`. The
 selection is pending. They do not change the running collector.
+
+The refinements use separate address lines and keep search limits in their
+controls. Listing photos identify the apartment beside its comparison values.
+Missing or broken photos show “Photo unavailable”; examples have no photos.
+The parser stores optional photo URLs from public listing cards and galleries,
+and preserves a photo when later pages omit it. Images load from the provider;
+no apartment photos are copied into this repository.

@@ -40,6 +40,8 @@ The supported Telegram API steps follow [Telegram’s bot tutorial](https://core
 
 The collector reads the first public result page for [studios](https://www.wg-gesucht.de/1-zimmer-wohnungen-in-Wuerzburg.141.1.1.0.html) and [apartments](https://www.wg-gesucht.de/wohnungen-in-Wuerzburg.141.2.1.0.html) in Würzburg. Listing IDs remove duplicates. It does not cover every portal or every result page. These are asking rents, not signed leases, and this is not a representative statistical survey. Explicitly named overnight/nightly stays are excluded. Temporary lets are excluded from market statistics and alerts by default. Some temporary lets may remain unidentified until their detail pages are checked.
 
+Listing records retain a photo URL from public listing cards or detail galleries when available. Missing photos remain unknown. The comparison drafts display those provider-hosted images.
+
 Each scan enriches at most 12 previously unchecked listings, prioritizing affordable homes, with a one-second gap between detail requests. The details show advertised total rent, base rent, service charges, other costs, deposit, and fixed end dates when available. No authentication, CAPTCHA bypass, or private API is used. Blocks, network failures, and layout changes are reported, and existing data is retained. Respect the provider’s terms and access controls; pause the collector if automated access is disallowed. Do not increase the polling rate.
 
 “Currently seen” means present in the latest successful first-page sample, not confirmed available. Listings that disappear remain in history and can still be viewed under Saved or Hidden. Partial source failures conservatively retain the previous sample.

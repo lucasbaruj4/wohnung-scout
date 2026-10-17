@@ -1,3 +1,9 @@
+## 2026-10-17
+- Added real listing photos to all three comparison drafts with honest missing-photo states.
+- Removed dot-separated summaries and separated addresses from comparison values.
+- Added photo parsing, retention, read-only preview caching, and a design regression check.
+- Recorded purposeful, readable UI guidance without dot-separated summaries.
+
 ## 2026-10-16
 - Added three cleaner comparison drafts on an isolated prototype branch.
 - Added module ownership checks and a shared local/CI verification command.

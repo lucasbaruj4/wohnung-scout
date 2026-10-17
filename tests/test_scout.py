@@ -47,6 +47,67 @@ class ScoutTests(unittest.TestCase):
         self.assertIn("Würzburg Altstadt", row["location"])
         self.assertEqual(row["available"], "01.11.2026")
 
+    def test_search_photos_use_listing_images_not_avatars_or_icons(self):
+        image = 'https://img.wg-gesucht.de/media/up/2026/01/flat.small.JPEG'
+        modern = MODERN_SEARCH.replace('<div class="card-content">', f'''
+            <img class="avatar" src="https://img.wg-gesucht.de/media/up/2026/01/user.jpg">
+            <img class="top-image-card" src="{image}">
+            <img src="/img/icons/virtual_tour_icon.svg"><div class="card-content">''')
+        self.assertEqual(parse_search(modern)[0]["image_url"], image)
+        legacy = SEARCH.replace('<div class="card_body">', '''
+            <div class="card_image"><img src="/img/d.gif"
+            data-src="/media/up/2026/01/flat.jpg"></div><div class="card_body">''')
+        self.assertEqual(parse_search(legacy)[0]["image_url"],
+                         "https://www.wg-gesucht.de/media/up/2026/01/flat.jpg")
+
+    def test_missing_placeholder_and_unsafe_photos_remain_unknown(self):
+        for url in ("/img/placeholder/empty_state_offer.svg", "/img/d.gif",
+                    "javascript:alert(1)", "data:image/jpeg;base64,example",
+                    "https://evil.example/media/up/flat.jpg", "https://[",
+                    "https://img.wg-gesucht.de.evil.example/media/up/flat.jpg",
+                    "https://name:password@img.wg-gesucht.de/media/up/flat.jpg",
+                    "https://img.wg-gesucht.de/media/up/user_photo_1.jpg"):
+            with self.subTest(url=url):
+                html = MODERN_SEARCH.replace('<div class="card-content">',
+                                             f'<img class="top-image-card" src="{url}"><div class="card-content">')
+                self.assertIsNone(parse_search(html)[0]["image_url"])
+        self.assertIsNone(parse_search(SEARCH)[0]["image_url"])
+
+    def test_detail_photo_replaces_thumbnail_and_keeps_it_when_gallery_is_missing(self):
+        thumbnail = "https://img.wg-gesucht.de/media/up/2026/01/flat.small.jpg"
+        full = "https://img.wg-gesucht.de/media/up/2026/01/flat.large.jpg"
+        row = dict(parse_search(SEARCH)[0], image_url=thumbnail)
+        gallery = f'<img class="sp-image" src="/img/d.gif" data-src="{full}">'
+        self.assertEqual(parse_detail(DETAIL + gallery, row)["image_url"], full)
+        self.assertEqual(parse_detail(DETAIL, row)["image_url"], thumbnail)
+        unrelated = '<img class="avatar" src="https://img.wg-gesucht.de/media/up/user.jpg">'
+        self.assertIsNone(parse_detail(DETAIL + unrelated, parse_search(SEARCH)[0])["image_url"])
+
+    def test_photo_and_saved_delivery_history_survive_rescans(self):
+        image = "https://img.wg-gesucht.de/media/up/2026/01/flat.large.jpg"
+        for price_changed, details_fail in ((False, False), (True, True), (True, False)):
+            with self.subTest(price_changed=price_changed, details_fail=details_fail):
+                old = dict(parse_detail(DETAIL, parse_search(SEARCH)[0]), image_url=image)
+                self.store.upsert(old, "first")
+                self.store.status("123", "saved")
+                self.store.notified("123")
+                search = SEARCH.replace("730 €", "700 €") if price_changed else SEARCH
+                collector = Collector(self.store)
+
+                def fetch(url):
+                    if url == old["url"]:
+                        if details_fail:
+                            raise RuntimeError("Offline")
+                        return DETAIL
+                    return search
+
+                with patch.object(collector, "fetch", side_effect=fetch), patch("scout.threading.Event.wait"):
+                    collector.scan()
+                row = self.store.rows()[0]
+                self.assertEqual(row["image_url"], image)
+                self.assertEqual((row["status"], row["notified"]), ("saved", True))
+                self.assertEqual(len(self.store.rows()), 1)
+
     def test_modern_nightly_prices_are_excluded_even_with_generic_titles(self):
         nightly = MODERN_SEARCH.replace('data-id="789"', 'data-id="790"').replace('pro Monat', 'pro Nacht')
         rows = parse_search(MODERN_SEARCH + nightly)
