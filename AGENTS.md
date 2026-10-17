@@ -14,3 +14,9 @@ Use synthetic listing data in tests. Keep unknown charges unknown.
 Preserve saved status and delivery history across collection updates.
 Keep credentials, real settings, listing data, and logs local and ignored.
 Live collection can send alerts. Use offline tests for routine verification.
+
+Keep the UI minimal and purposeful. Give each visible element a clear role in
+choosing or comparing an apartment. Keep apartment information large and readable.
+Use separate fields for distinct facts; never pack counts, limits, or listing facts
+into small dot-separated summaries. Keep search limits in their controls.
+Show only real listing photos, with an honest fallback when unavailable.

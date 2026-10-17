@@ -1,3 +1,6 @@
+## 2026-10-17
+- Recorded purposeful, readable UI guidance without dot-separated summaries.
+
 ## 2026-10-16
 - Launched Windows startup through a windowless host so the collector does not open a terminal.
 - Added a restartable local service and an optional hidden Windows logon task that keeps WSL alive while Windows is awake.

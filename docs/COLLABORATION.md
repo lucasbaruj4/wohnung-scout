@@ -1,3 +1,6 @@
+## 2026-10-17
+- Agent 872 | Problem: Preserve purposeful and readable apartment UI rules | Scope: AGENTS.md and docs - DONE
+
 ## 2026-10-16
 - Agent 428 | Problem: Keep the Windows startup helper hidden | Scope: startup script and docs - DONE
 - Agent 428 | Problem: Publish checks, compare UI options, and run locally as a service | Scope: runtime scripts, docs, isolated UI branch - DONE
