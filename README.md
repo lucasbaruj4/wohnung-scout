@@ -99,10 +99,18 @@ The supported Telegram API steps follow [Telegram’s bot tutorial](https://core
 ## Source coverage and limits
 
 Only whole apartments with a private kitchen and bathroom are eligible. Shared-flat offers, shared kitchens, and shared bathrooms are excluded when identified in titles or descriptions. Apartment categories are a starting point, not proof of facilities; confirm the original offer before applying. Saved records and delivery history remain stored even when an offer is excluded.
+Explicit shop, commercial, office, and practice spaces are excluded when identified in the listing, even if the provider categorizes them as apartments.
 
-The collector reads the first public result page for [studios](https://www.wg-gesucht.de/1-zimmer-wohnungen-in-Wuerzburg.141.1.1.0.html) and [apartments](https://www.wg-gesucht.de/wohnungen-in-Wuerzburg.141.2.1.0.html) in Würzburg, plus [ohne-makler whole apartments in Würzburg city](https://www.ohne-makler.net/immobilien/wohnung-mieten/bayern/kreis-wuerzburg-stadt/). WG-Gesucht stays as a source for its apartment categories. Nearby towns on source pages are excluded from the ohne-makler sample. IDs include the source where needed to prevent collisions. It does not cover every portal or every result page. These are asking rents, not signed leases, and this is not a representative statistical survey. Explicitly named overnight/nightly stays are excluded. Temporary lets are excluded from market statistics and alerts by default. Some temporary lets may remain unidentified until their detail pages are checked.
+The collector reads public apartment offers from these sources:
+
+- WG-Gesucht's first result page for [studios](https://www.wg-gesucht.de/1-zimmer-wohnungen-in-Wuerzburg.141.1.1.0.html) and [apartments](https://www.wg-gesucht.de/wohnungen-in-Wuerzburg.141.2.1.0.html).
+- [Ohne-makler whole apartments in Würzburg city](https://www.ohne-makler.net/immobilien/wohnung-mieten/bayern/kreis-wuerzburg-stadt/).
+- [Frauenland cooperative apartments](https://www.wg-frauenland.de/mieten/), including the advertised rent breakdown and planned availability. Membership is required. Unquoted cooperative share costs remain unknown, separate from the deposit. The cooperative's name does not mean shared-flat accommodation.
+
+Nearby towns are excluded from the ohne-makler and Frauenland samples. IDs include the source where needed to prevent collisions. It does not cover every portal or every result page. These are asking rents, not signed leases, and this is not a representative statistical survey. Explicitly named overnight/nightly stays are excluded. Temporary lets are excluded from market statistics and alerts by default. Some temporary lets may remain unidentified until their detail pages are checked.
 
 Listing records retain a photo URL from public listing cards or detail galleries when available. Missing photos remain unknown. The dashboard displays those provider-hosted images. Photos are never copied into Git.
+Frauenland currently publishes drawings and floor plans rather than apartment photos. Those images are not shown as photos.
 
 Ohne-makler search prices have unknown charges until detail enrichment. Detail pages separate cold rent, charges, deposit, and parking. The estimate adds known rent and charges plus your reserve. Parking inclusion needs confirmation. Offers with unknown service or heating charges appear under All current apartments but cannot match or trigger an alert. Unknown charges never become zero-cost claims.
 

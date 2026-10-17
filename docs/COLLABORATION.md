@@ -1,4 +1,9 @@
 ## 2026-10-17
+- Root | Problem: Brand icon and more apartment sources | Scope: public-source preview, integration, documentation and verification - DONE
+- Header icon agent | Problem: Small icon beside the brand | Scope: decorative SVG in the B1 header - DONE
+- Source design agent | Problem: Public whole-apartment sources | Scope: read-only source and parser design inspection - DONE
+- Frauenland source agent | Problem: Additional whole-apartment source | Scope: scout.py and synthetic source tests - DONE
+- Source review agent | Problem: Source correctness and comment review | Scope: uncommitted source, preview, UI and test changes - DONE
 - Root | Problem: Larger B1 images and dark mode | Scope: dashboard styling and browser verification - DONE
 - Root | Problem: B1 selection and whole-apartment search | Scope: integration, sources, housing rules, tests and guidance - DONE
 - B1 UI agent | Problem: Larger apartment photos | Scope: authoritative dashboard, production actions and read-only preview mode - DONE

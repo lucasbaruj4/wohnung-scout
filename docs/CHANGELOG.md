@@ -1,4 +1,9 @@
 ## 2026-10-17
+- Added a small home-search icon beside the dashboard name.
+- Added Frauenland cooperative apartment offers with explicit rent costs and membership requirements.
+- Added read-only public-source loading to the preview so non-WG-Gesucht offers appear without changing the live database.
+- Marked unconfirmed charges in the comparison and withheld savings claims for incomplete costs.
+- Excluded explicitly advertised commercial space even when a provider labels it as an apartment.
 - Changed B1 to a dark palette with high-contrast text and larger desktop and phone photos.
 - Selected B1 as the dashboard with larger photos, persistent production actions, and isolated preview actions.
 - Excluded shared flats and shared kitchens or bathrooms from comparisons and alerts without deleting history.

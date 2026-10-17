@@ -15,10 +15,12 @@ from bs4 import BeautifulSoup
 
 BASE = "https://www.wg-gesucht.de"
 OHNE = "https://www.ohne-makler.net"
+FRAUENLAND = "https://www.wg-frauenland.de"
 SEARCHES = (
     ("WG-Gesucht studios", f"{BASE}/1-zimmer-wohnungen-in-Wuerzburg.141.1.1.0.html"),
     ("WG-Gesucht apartments", f"{BASE}/wohnungen-in-Wuerzburg.141.2.1.0.html"),
     ("ohne-makler apartments", f"{OHNE}/immobilien/wohnung-mieten/bayern/kreis-wuerzburg-stadt/"),
+    ("Frauenland apartments", f"{FRAUENLAND}/mieten/"),
 )
 DEFAULTS = {"current_total": 1000, "budget": 850, "min_size": 30,
             "extra_costs": 60, "include_temporary": False}
@@ -41,6 +43,10 @@ def nightly_stay(title):
 
 def housing_type(listing, description=""):
     text = " ".join((listing["title"], listing.get("location", ""), description)).casefold()
+    if (listing.get("housing_type") == "non_residential"
+            or re.search(r"\b(?:ladenfläche|gewerbefläche|bürofläche|praxisfläche|verkaufsfläche)\b", text)
+            or re.search(r"\bladen\s+(?:links|rechts|zu\s+vermieten)\b", listing["title"], re.I)):
+        return "non_residential"
     occupancy_claims = re.sub(r"\b(?:keine?|ohne)\s+(?:wg(?:-zimmer)?|wohngemeinschaft)\b|"
                   r"\bwg[- ](?:geeignet|tauglich)\b", "", text)
     if re.search(r"\bwg[- ]?zimmer\b|\bzimmer\s+in\s+(?:einer\s+)?wg\b|"
@@ -58,6 +64,9 @@ def housing_type(listing, description=""):
     if re.match(r"https://www\.wg-gesucht\.de/(?:1-zimmer-wohnungen|wohnungen)-in-", url):
         return "entire_apartment"
     if listing.get("source") == "ohne-makler" and listing.get("housing_type") == "entire_apartment":
+        return "entire_apartment"
+    if (listing.get("source") == "Frauenland" and url == FRAUENLAND + "/mieten/"
+            and listing.get("housing_type") == "entire_apartment"):
         return "entire_apartment"
     return "unknown"
 
@@ -84,6 +93,8 @@ def listing_image(container, selector, page_url):
 
 
 def parse_search(html, source_url=BASE):
+    if urlsplit(source_url).hostname == "www.wg-frauenland.de":
+        return parse_frauenland_search(html)
     if urlsplit(source_url).hostname == "www.ohne-makler.net":
         return parse_ohne_search(html)
     soup = BeautifulSoup(html, "html.parser")
@@ -132,6 +143,8 @@ def parse_search(html, source_url=BASE):
 
 
 def parse_detail(html, listing):
+    if listing.get("source") == "Frauenland":
+        return dict(listing)
     if listing.get("source") == "ohne-makler":
         return parse_ohne_detail(html, listing)
     soup = BeautifulSoup(html, "html.parser")
@@ -233,6 +246,111 @@ def parse_ohne_detail(html, listing):
     if re.fullmatch(re.escape(OHNE) + r"/immobilie/\d+/picture/\d+/(?:medium|large)\.jpg", value):
         row["image_url"] = value
     return row
+
+
+def parse_frauenland_search(html):
+    soup = BeautifulSoup(html, "html.parser")
+    offers = soup.select_one('[data-label="angebote"]')
+    heading = next((node for node in offers.select("h2")
+                    if node.get_text(" ", strip=True) == "Wohnungen"), None) if offers else None
+    if heading is None:
+        raise ValueError("Frauenland apartment section unavailable.")
+    section = []
+    for node in heading.find_next_siblings():
+        if node.name == "h2":
+            break
+        section.append(node)
+    tables = [node for node in section if node.name == "table"]
+    empty_message = re.compile(r"\bkeine[nr]?\s+(?:(?:freien?|verfügbaren?)\s+)?(?:Wohnungen|Angebote)\b", re.I)
+    if not tables:
+        text = " ".join(node.get_text(" ", strip=True) for node in section)
+        if empty_message.search(text) and not re.search(r"\bWohnung\s+\d+", text):
+            return []
+        raise ValueError("Frauenland apartment table layout changed.")
+    listings = []
+    ids = set()
+    for table in tables:
+        if not table.select("td") and table.get_text(" ", strip=True):
+            raise ValueError("Frauenland apartment table layout changed.")
+        for cell in table.select("td"):
+            headings = [node for node in cell.select("h4")
+                        if re.match(r"^Wohnung\b", node.get_text(" ", strip=True))]
+            if not headings:
+                text = cell.get_text(" ", strip=True)
+                if text and not empty_message.search(text):
+                    raise ValueError("Frauenland apartment units unavailable.")
+                continue
+            address = cell.select_one("h3")
+            location = " ".join(address.get_text(" ", strip=True).split()) if address else ""
+            if not re.search(r"\b\d{5}\s+\S+", location):
+                raise ValueError("Frauenland apartment address unavailable.")
+            prefix = []
+            for node in cell.children:
+                if node == headings[0]:
+                    break
+                if getattr(node, "name", None):
+                    prefix.append(node.get_text(" ", strip=True))
+            building = " ".join(prefix)
+            availability = re.search(r"(?:Bezug|bezugsfrei|Einzug|\bab\b).*?(\d{2}\.\d{2}\.\d{4})",
+                                     building, re.I)
+            available = availability[1] if availability else "Not listed"
+            if availability and re.search(r"geplant", building, re.I):
+                available += " (planned)"
+            for heading in headings:
+                unit = re.fullmatch(r"Wohnung\s+(\d+)", heading.get_text(" ", strip=True))
+                if unit is None:
+                    raise ValueError("Frauenland apartment unit identifier unavailable.")
+                fields, description = {}, []
+                for node in heading.find_next_siblings():
+                    if node.name in ("h3", "h4", "hr"):
+                        break
+                    text = node.get_text(" ", strip=True)
+                    description.append(text)
+                    label = node.select_one("strong")
+                    if label:
+                        key = label.get_text(" ", strip=True).rstrip(": ")
+                        fields[key] = text[len(label.get_text(" ", strip=True)):].strip()
+                required = ("Zimmer", "Wohnfläche", "Nettokaltmiete", "Betriebskosten", "Heizkosten", "Gesamtmiete")
+                if any(key not in fields for key in required):
+                    raise ValueError("Frauenland apartment costs or area unavailable.")
+                costs = {}
+                for key in required[2:]:
+                    value = fields[key]
+                    if re.fullmatch(r"[\d.,\s]+\s*€", value):
+                        costs[key] = number(value)
+                    elif re.fullmatch(r"(?:auf Anfrage|unbekannt|k\.?\s*A\.?|[-–])", value, re.I):
+                        costs[key] = None
+                    else:
+                        raise ValueError("Frauenland apartment cost format changed.")
+                if not re.fullmatch(r"[\d.,\s]+\s*m[²2]", fields["Wohnfläche"]):
+                    raise ValueError("Frauenland apartment area format changed.")
+                size = number(fields["Wohnfläche"])
+                if not size or costs["Gesamtmiete"] is None or costs["Gesamtmiete"] <= 0:
+                    raise ValueError("Frauenland apartment total rent or area unavailable.")
+                complete = all(costs[key] is not None for key in required[2:])
+                if complete and abs(sum(costs[key] for key in required[2:5]) - costs["Gesamtmiete"]) > .02:
+                    raise ValueError("Frauenland apartment costs do not match its total rent.")
+                if not re.search(r"\b970(?:70|72|74|76|78|80|82|84)\s+Würzburg\b", location):
+                    continue
+                identifier = "frauenland:" + re.sub(r"[^\w]+", "-", location.casefold()).strip("-") + ":" + str(int(unit[1]))
+                if identifier in ids:
+                    raise ValueError("Frauenland apartment identifier repeated.")
+                ids.add(identifier)
+                row = {"id": identifier, "source": "Frauenland", "url": FRAUENLAND + "/mieten/",
+                       "title": f"Wohnung {int(unit[1])}, {location}", "location": location,
+                       "rent": costs["Gesamtmiete"], "size": size, "available": available,
+                       "temporary": bool(re.search(r"zwischenmiete|befristet|sublet|temporary", building + " ".join(description), re.I)),
+                       "rent_basis": "listed total", "base_rent": costs["Nettokaltmiete"],
+                       "service_costs": (costs["Betriebskosten"] + costs["Heizkosten"]
+                                         if costs["Betriebskosten"] is not None and costs["Heizkosten"] is not None else None),
+                       "other_costs": None, "deposit": None, "image_url": None,
+                       "details_checked": True, "housing_checked": True, "monthly_charges_known": complete,
+                       "housing_type": "entire_apartment", "membership_required": True,
+                       "membership_costs": None,
+                       "source_note": "Cooperative membership required. Share costs need confirmation."}
+                row["housing_type"] = housing_type(row, building + " " + " ".join(description))
+                listings.append(row)
+    return listings
 
 
 def evaluate(rows, settings):
@@ -345,11 +463,11 @@ class Collector:
             checked = 0
             for listing in prioritized:
                 old = previous.get(listing["id"])
-                if old and housing_type(old) == "shared":
-                    listing["housing_type"] = "shared"
+                if old and housing_type(old) in ("shared", "non_residential"):
+                    listing["housing_type"] = housing_type(old)
                 if old and not listing.get("image_url"):
                     listing["image_url"] = old.get("image_url")
-                if (old and old["details_checked"] and old.get("housing_checked")
+                if (not listing["details_checked"] and old and old["details_checked"] and old.get("housing_checked")
                         and old.get("monthly_charges_known", True)
                         and old.get("search_rent", old["rent"]) == listing["rent"]):
                     for key in ("rent", "rent_basis", "base_rent", "service_costs", "other_costs", "deposit", "details_checked", "housing_checked"):
@@ -360,7 +478,7 @@ class Collector:
                     listing["temporary"] = listing["temporary"] or old["temporary"]
                     if " → " in old["available"]:
                         listing["available"] += " → " + old["available"].split(" → ", 1)[1]
-                elif checked < detail_limit:
+                elif not listing["details_checked"] and checked < detail_limit:
                     checked += 1
                     try:
                         listing = parse_detail(self.fetch(listing["url"]), listing)

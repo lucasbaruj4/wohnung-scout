@@ -27,6 +27,23 @@ class WholeApartmentTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.store = Store(Path(self.temp.name) / 'test.sqlite3')
 
+    def test_miscategorized_commercial_space_never_matches_or_returns_after_rescan(self):
+        offer = parse_search(OM_SEARCH.replace('Sunny apartment', '10008 Laden links'), OM_URL)[0]
+        commercial = parse_detail(OM_DETAIL.replace('Own kitchen and bathroom.',
+                                      'Helle Ladenfläche mit großer Fensterfront.'), offer)
+        self.assertEqual(commercial['housing_type'], 'non_residential')
+        self.assertEqual(evaluate([commercial], DEFAULTS), [])
+        self.store.upsert(commercial, 'first')
+        self.store.status(commercial['id'], 'saved')
+        collector = Collector(self.store, lambda row: self.fail('Commercial space alerted'))
+        with patch('scout.SEARCHES', [('Synthetic', OM_URL)]), patch.object(
+                collector, 'fetch', return_value=OM_SEARCH):
+            collector.scan()
+        self.assertEqual(evaluate(self.store.rows(), DEFAULTS), [])
+        self.assertEqual(self.store.rows()[0]['status'], 'saved')
+        normal = parse_search(OM_SEARCH.replace('Sunny apartment', 'Wohnung mit Arbeitszimmer'), OM_URL)[0]
+        self.assertEqual(housing_type(normal), 'entire_apartment')
+
     def test_shared_offers_are_excluded_but_wg_suitability_is_not(self):
         for title in ('WG-Zimmer', 'Zimmer in einer WG', '4er Wohngemeinschaft einzelne Zimmer',
                       'Wohnung mit Gemeinschaftsküche', 'Studio mit geteiltem Badezimmer',

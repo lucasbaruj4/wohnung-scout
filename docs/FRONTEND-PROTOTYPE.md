@@ -19,7 +19,11 @@ filtering, and marks the response `preview: true`. Save, Hide, and settings
 changes stay in browser memory. No preview write routes exist.
 API failure shows an error rather than synthetic apartment offers.
 GET /api/photos reads fixed public searches and caches photo URLs in memory
-for 30 minutes. It never opens a database, reads credentials, or sends alerts.
+for 30 minutes. It reads only WG-Gesucht searches.
+GET /api/sources reads the configured non-WG-Gesucht public searches and checks
+at most four incomplete offers for rent details. Its memory cache lasts 30 minutes.
+Those offers join the comparison after the existing local data loads.
+Neither route opens a database, reads credentials, or sends alerts.
 
 On the production app, the same dashboard uses the existing status and settings
 POST routes. It performs no writes on load. The preview flag separates those modes.
@@ -30,6 +34,10 @@ Old B1 links redirect to the authoritative dashboard. The earlier A/B/C drafts
 remain on the prototype branch for reference.
 
 Only whole apartments qualify. WG-Gesucht remains a source alongside
-[ohne-makler](https://www.ohne-makler.net/immobilien/wohnung-mieten/bayern/kreis-wuerzburg-stadt/).
+[ohne-makler](https://www.ohne-makler.net/immobilien/wohnung-mieten/bayern/kreis-wuerzburg-stadt/)
+and [Frauenland](https://www.wg-frauenland.de/mieten/).
+Frauenland is a housing cooperative, not a shared-flat category.
+Its offers require membership; unquoted share costs remain unknown.
+Its current illustrations and floor plans are not shown as apartment photos.
 The backend owns shared-flat exclusion. The dashboard receives eligible records.
 Provider photos have an honest unavailable state and stay outside Git.
