@@ -1,4 +1,5 @@
 ## 2026-10-17
+- Recorded B1 selection and the whole-apartment rule while retaining WG-Gesucht apartment categories.
 - Recorded purposeful, readable UI guidance without dot-separated summaries.
 
 ## 2026-10-16

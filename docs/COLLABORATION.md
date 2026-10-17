@@ -1,4 +1,5 @@
 ## 2026-10-17
+- Root | Problem: Selected B1 and whole-apartment requirement | Scope: guidance here; implementation in existing UI worktree - DONE
 - Agent 872 | Problem: Preserve purposeful and readable apartment UI rules | Scope: AGENTS.md and docs - DONE
 
 ## 2026-10-16
