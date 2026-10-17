@@ -1,4 +1,5 @@
 ## 2026-10-17
+- Root | Problem: Larger B1 images and dark mode | Scope: dashboard styling and browser verification - DONE
 - Root | Problem: B1 selection and whole-apartment search | Scope: integration, sources, housing rules, tests and guidance - DONE
 - B1 UI agent | Problem: Larger apartment photos | Scope: authoritative dashboard, production actions and read-only preview mode - DONE
 - Source options agent | Problem: Additional whole-apartment source | Scope: public source inspection without runtime writes - DONE

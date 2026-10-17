@@ -1,4 +1,5 @@
 ## 2026-10-17
+- Changed B1 to a dark palette with high-contrast text and larger desktop and phone photos.
 - Selected B1 as the dashboard with larger photos, persistent production actions, and isolated preview actions.
 - Excluded shared flats and shared kitchens or bathrooms from comparisons and alerts without deleting history.
 - Added public ohne-makler apartment search and detail parsing for Würzburg, with explicit rent basis and unknown charges.

@@ -1,8 +1,8 @@
-.listing-photo{display:flex;align-items:center;justify-content:center;overflow:hidden;background:#e9e6df;color:#62665f;font-size:14px;text-align:center;aspect-ratio:4/3;min-width:0}
+.listing-photo{display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--photo-background,#e9e6df);color:var(--photo-text,#62665f);font-size:14px;text-align:center;aspect-ratio:4/3;min-width:0}
 .listing-photo img{display:block;width:100%;height:100%;object-fit:cover}
 .listing-address{display:block}.listing-address>span{display:block}
-.apartment-heading{display:grid;grid-template-columns:224px minmax(0,1fr);gap:20px;align-items:center}
-.apartment-heading .listing-photo{width:224px;height:168px}
+.apartment-heading{display:grid;grid-template-columns:280px minmax(0,1fr);gap:20px;align-items:center}
+.apartment-heading .listing-photo{width:280px;height:210px}
 .listing-status{font-size:14px;color:var(--copper);margin-top:8px}
 .column-photo{width:100%;aspect-ratio:4/3;margin-bottom:22px}
 .home-copy{min-width:0}
@@ -14,5 +14,5 @@
 .detail-space{font-size:24px;white-space:nowrap}
 .option-facts{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;margin-top:8px;color:var(--muted)}
 .option-meta{display:block}
-@media(max-width:1050px){.apartment-heading{grid-template-columns:1fr}.apartment-heading .listing-photo{width:100%;height:auto;aspect-ratio:3/2}}
+@media(max-width:1050px){.apartment-heading{grid-template-columns:1fr}.apartment-heading .listing-photo{width:100%;height:auto;aspect-ratio:4/3}}
 @media(max-width:760px){.detail-facts{align-items:start;flex-wrap:wrap;gap:8px}.detail-photo{margin-bottom:24px}}

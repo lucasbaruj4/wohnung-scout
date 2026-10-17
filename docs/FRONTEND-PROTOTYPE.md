@@ -1,7 +1,8 @@
 # Frontend preview
 
 Lucas selected B1. `static/index.html` is the authoritative dashboard.
-Photos are 224 × 168 pixels on desktop and fill the apartment row on phones.
+The dashboard uses a dark palette with high-contrast text.
+Photos are 280 × 210 pixels on desktop and fill the apartment row on phones.
 Titles remain 20 pixels and totals remain 28 pixels.
 Select a title for the cost breakdown, Save, Hide, or the original listing.
 Search limits contain the budget, size, reserve, current costs, and temporary-let setting.
