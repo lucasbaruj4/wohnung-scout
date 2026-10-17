@@ -20,4 +20,9 @@ choosing or comparing an apartment. Keep apartment information large and readabl
 Use separate fields for distinct facts; never pack counts, limits, or listing facts
 into small dot-separated summaries. Keep search limits in their controls.
 Show only real listing photos, with an honest fallback when unavailable.
-The comparison draft check in `tests/test_design.py` prevents these summaries.
+The UI check in `tests/test_design.py` prevents these summaries.
+
+B1 is the chosen dashboard. Show only whole apartments with a private kitchen
+and bathroom. Keep WG-Gesucht's apartment categories; exclude shared-flat offers
+and shared facilities in parsing, comparisons, and alerts. Keep saved and delivery
+history intact. `tests/test_whole_apartments.py` checks this rule across rescans.

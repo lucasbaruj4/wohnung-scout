@@ -36,7 +36,7 @@ def create_app(store, collector):
                        last_check=store.get("last_check"), last_success=store.get("last_success"),
                        errors=store.get("errors", []), scanning=collector.lock.locked(),
                        telegram_connected=is_configured(), telegram_error=store.get("telegram_error"),
-                       source="WG-Gesucht · first page of studios and apartments", interval_minutes=30)
+                       source="WG-Gesucht and ohne-makler whole apartments in Würzburg", interval_minutes=30)
 
     @app.post("/api/settings")
     def settings():

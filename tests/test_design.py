@@ -11,8 +11,8 @@ def has_summary_separator(source):
 
 
 class DesignTests(unittest.TestCase):
-    def test_comparison_refinements_use_separate_fields_instead_of_dot_summaries(self):
-        paths = [*ROOT.glob("static/prototype/compare-*.html"),
+    def test_apartment_ui_uses_separate_fields_instead_of_dot_summaries(self):
+        paths = [ROOT / "static/index.html", *ROOT.glob("static/prototype/compare-*.html"),
                  ROOT / "static/prototype/comparison.html",
                  ROOT / "static/prototype/listing-photos.js"]
         for path in paths:

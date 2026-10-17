@@ -4,9 +4,9 @@
 <iframe id="view" title="Comparison option B1"></iframe>
 <nav class="dock" aria-label="Frontend preview switcher"><button id="previous" aria-label="Previous frontend">‹</button><select id="variant" aria-label="Frontend option"><option value="B1">B1 Clear table</option><option value="B2">B2 Side by side</option><option value="B3">B3 Focus</option></select><button id="next" aria-label="Next frontend">›</button><a href="/static/prototype/compare.html" target="_blank" rel="noopener">Original B ↗</a></nav>
 <script>
-const variants={B1:'compare-clear',B2:'compare-columns',B3:'compare-focus'},keys=Object.keys(variants),frame=document.getElementById('view'),choice=document.getElementById('variant');
+const variants={B1:'/static/index.html',B2:'/static/prototype/compare-columns.html',B3:'/static/prototype/compare-focus.html'},keys=Object.keys(variants),frame=document.getElementById('view'),choice=document.getElementById('variant');
 let current=keys.includes(new URLSearchParams(location.search).get('variant'))?new URLSearchParams(location.search).get('variant'):'B1';
-function show(key){current=key;choice.value=key;history.replaceState(null,'','?variant='+key);frame.title='Comparison option '+key;frame.src='/static/prototype/'+variants[key]+'.html';}
+function show(key){current=key;choice.value=key;history.replaceState(null,'','?variant='+key);frame.title='Comparison option '+key;frame.src=variants[key];}
 function cycle(step){show(keys[(keys.indexOf(current)+step+keys.length)%keys.length]);}
 function keyboard(event){if(event.defaultPrevented||event.target.closest('input,textarea,select,[contenteditable="true"]'))return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();cycle(event.key==='ArrowLeft'?-1:1);}}
 frame.addEventListener('load',()=>frame.contentWindow.addEventListener('keydown',keyboard));document.addEventListener('keydown',keyboard);choice.addEventListener('change',()=>show(choice.value));document.getElementById('previous').onclick=()=>cycle(-1);document.getElementById('next').onclick=()=>cycle(1);show(current);

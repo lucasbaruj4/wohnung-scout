@@ -3,7 +3,7 @@ const listingPhotos = {
     const address = document.createElement('span');
     address.className = 'listing-address ' + className;
     const parts = String(row.location || '').split(/\s*[\u00b7\u2022|]\s*/u).filter(Boolean);
-    if (parts.length > 1 && /^(?:[\d,]+[- ]zimmer[- ]wohnung|apartment|studio)$/i.test(parts[0])) parts.shift();
+    if (parts.length > 1 && /^(?:[\d,]+[- ]zimmer[- ]wohnung|wohnung|apartment|studio)$/i.test(parts[0])) parts.shift();
     for (const part of parts) {
       const line = document.createElement('span');
       line.textContent = part;
@@ -21,9 +21,10 @@ const listingPhotos = {
     let url;
     try {
       url = new URL(row.image_url);
-      if (url.protocol !== 'https:' || url.username || url.password ||
-          !['www.wg-gesucht.de', 'img.wg-gesucht.de'].includes(url.hostname) ||
-          !url.pathname.startsWith('/media/up/')) throw Error('Not a listing photo');
+      const wgPhoto = ['www.wg-gesucht.de', 'img.wg-gesucht.de'].includes(url.hostname) && url.pathname.startsWith('/media/up/');
+      const omPhoto = url.hostname === 'media.ohne-makler.net' ||
+        (url.hostname === 'www.ohne-makler.net' && /^\/immobilie\/\d+\/picture\//.test(url.pathname));
+      if (url.protocol !== 'https:' || url.username || url.password || !(wgPhoto || omPhoto)) throw Error('Not a listing photo');
     } catch {
       missing();
       return frame;

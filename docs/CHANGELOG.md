@@ -1,4 +1,7 @@
 ## 2026-10-17
+- Selected B1 as the dashboard with larger photos, persistent production actions, and isolated preview actions.
+- Excluded shared flats and shared kitchens or bathrooms from comparisons and alerts without deleting history.
+- Added public ohne-makler apartment search and detail parsing for Würzburg, with explicit rent basis and unknown charges.
 - Added real listing photos to all three comparison drafts with honest missing-photo states.
 - Removed dot-separated summaries and separated addresses from comparison values.
 - Added photo parsing, retention, read-only preview caching, and a design regression check.

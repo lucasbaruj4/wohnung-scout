@@ -1,49 +1,34 @@
-# Choose a frontend
+# Frontend preview
 
-Compare three read-only versions of the existing apartment dashboard.
-A puts the shortlist first. B puts the comparison table first.
-C puts price and size on a large chart.
+Lucas selected B1. `static/index.html` is the authoritative dashboard.
+Photos are 224 × 168 pixels on desktop and fill the apartment row on phones.
+Titles remain 20 pixels and totals remain 28 pixels.
+Select a title for the cost breakdown, Save, Hide, or the original listing.
+Search limits contain the budget, size, reserve, current costs, and temporary-let setting.
 
-Run the main app for live data, then run this branch with its installed Python:
+Run this branch without starting a second collector:
 
 ```bash
 ../wohnung-scout/.venv/bin/python scripts/preview-ui.py
 ```
 
-Open http://127.0.0.1:8766/?variant=A.
-Use the bottom switcher or the left and right arrow keys to change options.
-Inputs keep their normal arrow-key behavior.
-All preview changes stay in memory. There are no write API routes.
+Open http://127.0.0.1:8766/.
+The preview proxies GET /api/state from port 8765, applies whole-apartment
+filtering, and marks the response `preview: true`. Save, Hide, and settings
+changes stay in browser memory. No preview write routes exist.
+API failure shows an error rather than synthetic apartment offers.
+GET /api/photos reads fixed public searches and caches photo URLs in memory
+for 30 minutes. It never opens a database, reads credentials, or sends alerts.
 
-The server proxies GET /api/state from the main app on port 8765.
-GET /api/photos reads the two public search pages and caches photo URLs in memory
-for 30 minutes. It starts no collector and reads no local credential file.
-It never changes listings, settings, saved status, or delivery history.
-If the main app is unavailable, each option labels its synthetic examples.
+On the production app, the same dashboard uses the existing status and settings
+POST routes. It performs no writes on load. The preview flag separates those modes.
 
-B was selected as the direction for the next iteration. The original drafts
-stay on `prototype/frontend-options`. Implement the final choice separately.
+B2 and B3 remain read-only alternatives at
+http://127.0.0.1:8766/static/prototype/comparison.html.
+Old B1 links redirect to the authoritative dashboard. The earlier A/B/C drafts
+remain on the prototype branch for reference.
 
-## Second iteration
-
-The chosen direction is B, the comparison layout. The next decision is how
-much detail should be visible before selecting an apartment. Larger text,
-stronger contrast, and fewer simultaneous controls apply to every option.
-
-- B1 uses one clear table. Apartment details expand inside the selected row.
-- B2 compares two or three apartments in aligned columns.
-- B3 keeps a short list beside one focused apartment.
-
-Open http://127.0.0.1:8766/static/prototype/comparison.html?variant=B1.
-The shared bottom switcher selects B1, B2, or B3. Original B stays available
-through the link beside it. All changes remain in browser memory.
-
-These are throwaway drafts on `prototype/comparison-refinements`. The
-selection is pending. They do not change the running collector.
-
-The refinements use separate address lines and keep search limits in their
-controls. Listing photos identify the apartment beside its comparison values.
-Missing or broken photos show “Photo unavailable”; examples have no photos.
-The parser stores optional photo URLs from public listing cards and galleries,
-and preserves a photo when later pages omit it. Images load from the provider;
-no apartment photos are copied into this repository.
+Only whole apartments qualify. WG-Gesucht remains a source alongside
+[ohne-makler](https://www.ohne-makler.net/immobilien/wohnung-mieten/bayern/kreis-wuerzburg-stadt/).
+The backend owns shared-flat exclusion. The dashboard receives eligible records.
+Provider photos have an honest unavailable state and stay outside Git.

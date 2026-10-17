@@ -6,7 +6,7 @@ from unittest.mock import patch
 import requests
 
 from app import create_app
-from scout import Collector, DEFAULTS, Store, evaluate, number, parse_detail, parse_search, validate_settings
+from scout import Collector, DEFAULTS, SEARCHES, Store, evaluate, number, parse_detail, parse_search, validate_settings
 from telegram_alerts import call, is_configured
 
 SEARCH = '''<div class="offer_list_item" data-id="123">
@@ -17,7 +17,8 @@ DETAIL = '''<div><span class="key_fact_detail">Gesamtmiete</span><b class="key_f
 <div class="row"><span class="section_panel_detail">Miete:</span><span class="section_panel_value">550€</span></div>
 <div class="row"><span class="section_panel_detail">Nebenkosten:</span><span class="section_panel_value">180€</span></div>
 <div class="row"><span class="section_panel_detail">Sonstige Kosten:</span><span class="section_panel_value">n.a.</span></div>
-<div class="row"><span class="section_panel_detail">frei bis:</span><span class="section_panel_value">31.12.2026</span></div>'''
+<div class="row"><span class="section_panel_detail">frei bis:</span><span class="section_panel_value">31.12.2026</span></div>
+<div id="ad_description_text">Private kitchen and bathroom.</div>'''
 MODERN_SEARCH = '''<a class="wgg-list-card offer_list_item" data-id="789"
 href="/wohnungen-in-Wuerzburg.789.html">
 <div class="card-content"><div class="price-row"><div>
@@ -168,7 +169,7 @@ class ScoutTests(unittest.TestCase):
         with patch.object(collector, "fetch", side_effect=RuntimeError("Offline")):
             collector.scan()
         self.assertEqual(len(self.store.rows()), 1)
-        self.assertEqual(len(self.store.get("errors")), 2)
+        self.assertEqual(len(self.store.get("errors")), len(SEARCHES))
         self.assertIsNone(self.store.get("last_success"))
 
     def test_cached_costs_do_not_freeze_listing_title_or_start_date(self):
