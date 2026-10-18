@@ -1,27 +1,192 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Wohnung Scout — Würzburg</title>
-  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/static/style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wohnung Scout | Würzburg</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<style>
+:root{--paper:#111518;--surface:#1a1e22;--ink:#f6f7f8;--muted:#c7d0d8;--line:#58636e;--copper:#ffb98f;--wash:#26313a;--photo-background:#222b32;--photo-text:#d7dfe5;--button-text:#14191d;color-scheme:dark;--sans:"Avenir Next",Avenir,"Segoe UI",sans-serif;--serif:Georgia,"Times New Roman",serif}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 var(--sans);-webkit-font-smoothing:antialiased}button,input,select{font:inherit;color:inherit}button,a{touch-action:manipulation}button{cursor:pointer}button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--copper);outline-offset:4px}button{background:none}button,a,input,select{-webkit-tap-highlight-color:transparent}.masthead{margin:auto;max-width:1400px;padding:20px 40px;display:flex;justify-content:space-between;gap:20px;align-items:center;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:9px;font-size:19px;font-weight:700;letter-spacing:-.5px}.brand-icon{width:22px;height:22px;flex:none;color:var(--copper)}.place{font-size:14px;color:var(--muted)}main{max-width:1400px;margin:0 auto;padding:32px 40px 40px}.intro{max-width:690px}h1{font:normal 42px/1.12 var(--serif);letter-spacing:-1.8px;margin:0}.intro p{margin:0;color:var(--muted);font-size:17px}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:26px;margin-bottom:22px}.view-label{display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600}.view-label select{appearance:auto;border:0;border-bottom:1px solid var(--ink);background:transparent;border-radius:0;padding:9px 24px 9px 0;max-width:100%}.limits-button{border:1px solid var(--ink);padding:10px 18px;white-space:nowrap;border-radius:3px;font-weight:600;font-size:15px}.limits-button:hover{background:var(--ink);color:var(--surface)}.limits-summary{font-size:14px;color:var(--muted);margin:0 0 20px}.count{color:var(--ink);font-weight:650}.comparison{width:100%;border-collapse:collapse;table-layout:fixed;text-align:left;background:var(--surface);border-top:2px solid var(--ink)}th{font-size:14px;font-weight:500;color:var(--muted);padding:17px 24px;border-bottom:1px solid var(--line);vertical-align:middle}th:first-child{width:60%}th:nth-child(2){width:25%}th:nth-child(3){width:15%}th button{border:0;padding:0;text-align:left;font:inherit}td{padding:26px 24px;border-bottom:1px solid var(--line);vertical-align:middle}.apartment-button{font:600 20px/1.4 var(--sans);text-align:left;border:0;padding:0;display:block;width:100%;overflow-wrap:anywhere;letter-spacing:-.25px}.apartment-button:hover{color:var(--copper)}.location{font-size:14px;color:var(--muted);margin-top:8px;overflow-wrap:anywhere}.total{font-size:28px;font-weight:650;line-height:1.3;white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:-.6px}.space{font-size:22px;white-space:nowrap;font-variant-numeric:tabular-nums}.row-label{display:none}.chosen td{background:var(--wash);border-bottom-color:var(--wash)}.chosen td:first-child{box-shadow:inset 4px 0 var(--copper)}.chosen .apartment-button{color:var(--copper)}.detail-row td{padding:0;background:var(--wash)}.detail-body{padding:0 24px 28px;border-left:4px solid var(--copper);display:grid;grid-template-columns:1fr 1fr;gap:22px 42px}.cost-breakdown{margin:0;display:grid;grid-template-columns:1fr auto;gap:8px 20px;font-size:15px}.cost-breakdown dt{color:var(--muted)}.cost-breakdown dd{margin:0;font-variant-numeric:tabular-nums}.detail-copy p{margin:0;font-size:15px}.detail-copy .saving{font-weight:600;color:#b7edc9;margin-bottom:10px}.detail-actions{grid-column:1/-1;display:flex;gap:12px;align-items:center;flex-wrap:wrap}.open-link,.save-button{display:inline-block;padding:10px 17px;font-weight:600;font-size:15px;text-decoration:none;border-radius:3px}.open-link{background:var(--copper);color:var(--button-text);border:1px solid var(--copper)}.save-button{border:1px solid #8795a1;background:transparent}.open-link:hover{background:#ffd0b2}.save-button:hover{background:#354550}.save-button[aria-pressed=true]{background:#294333;border-color:#92c8a3;color:#e4f8e9}.preview-note{font-size:13px;color:var(--muted)}.listing-source{font-size:14px;color:var(--muted);margin-top:8px}#notice:empty{display:none}#notice{padding:14px 18px;border-left:3px solid var(--copper);background:var(--wash);margin-top:22px;overflow-wrap:anywhere}button:disabled,select:disabled{opacity:.6;cursor:wait}.field small{display:block;font-size:13px;color:var(--muted);margin-top:6px}.empty{padding:38px 24px;border-bottom:1px solid var(--line);background:var(--surface);font-size:17px}.footnote{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-top:23px;font-size:13px;line-height:1.7;color:var(--muted)}.footnote p{margin:0;max-width:650px}#source{white-space:nowrap}dialog{max-width:460px;width:calc(100% - 32px);padding:31px;border:1px solid var(--line);border-radius:5px;background:var(--surface);color:var(--ink)}dialog::backdrop{background:#000b}dialog h2{font:normal 31px var(--serif);margin:0 0 8px}dialog p{font-size:14px;color:var(--muted);margin:0 0 23px}.field{display:block;font-size:15px;margin:18px 0}.field input{display:block;width:100%;margin-top:7px;padding:10px 12px;border:1px solid #8795a1;border-radius:3px;background:#10171c}.check{display:flex;align-items:flex-start;gap:10px;margin:22px 0;font-size:15px}.check input{margin-top:6px;accent-color:var(--copper);width:17px;height:17px}.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:29px}.dialog-actions button{border:1px solid var(--line);padding:10px 16px;border-radius:3px}.dialog-actions .apply{background:var(--ink);color:var(--button-text);border-color:var(--ink)}[hidden]{display:none!important}
+@media(max-width:760px){.masthead{padding:22px 24px}main{padding:35px 24px}h1{font-size:41px}.toolbar{margin-top:31px}.comparison th,.comparison td{padding-left:18px;padding-right:18px}th:first-child{width:49%}th:nth-child(2){width:32%}th:nth-child(3){width:19%}.total{font-size:28px}.apartment-button{font-size:20px}.space{font-size:20px}.detail-body{padding:0 18px 24px;gap:20px;grid-template-columns:1fr}.detail-actions{grid-column:auto}.footnote{display:block}.footnote p+p{margin-top:9px}}
+@media(max-width:540px){.masthead{padding:20px}.brand{font-size:18px}.place{font-size:13px}main{padding:32px 20px}h1{font-size:38px;letter-spacing:-1px}.intro p{font-size:16px}.toolbar{gap:12px;align-items:flex-start;margin-bottom:15px}.view-label{min-width:0;font-size:15px}.view-label select{max-width:184px;padding-right:4px}.limits-button{font-size:14px;padding:10px 12px}.limits-summary{font-size:14px;margin-bottom:17px}.comparison,.comparison tbody{display:block}.comparison thead{display:none}.comparison tr{display:grid;grid-template-columns:1.4fr 1fr;border-bottom:1px solid var(--line);padding:22px 20px;gap:20px;background:var(--surface)}.comparison td{border:0;padding:0;display:block}.comparison td:first-child{grid-column:1/-1}.apartment-button{font-size:20px;line-height:1.42}.location{font-size:14px;margin-top:7px}.row-label{display:block;font-size:13px;color:var(--muted);line-height:1.4;margin-bottom:7px;font-weight:400;letter-spacing:0}.total{font-size:28px}.space{font-size:24px}.comparison tr.chosen{background:var(--wash);box-shadow:inset 4px 0 var(--copper);border-bottom:0}.chosen td{background:transparent}.chosen td:first-child{box-shadow:none}.comparison tr.detail-row{display:block;background:var(--wash);padding:0 20px 24px;box-shadow:inset 4px 0 var(--copper)}.detail-body{padding:0;border:0;gap:20px}.cost-breakdown{font-size:14px;gap:9px 10px}.detail-copy p{font-size:14px}.detail-actions{display:grid;grid-template-columns:1fr;gap:10px}.open-link,.save-button{text-align:center}.preview-note{text-align:center}.footnote{margin-top:18px;font-size:13px}#source{white-space:normal}.empty{padding:27px 20px}}
+@media(prefers-reduced-motion:no-preference){button,a{transition:color .15s,background .15s}}
+.cost-warning{display:block;margin:7px 0 0;color:var(--copper);font-size:13px;line-height:1.4;white-space:normal;font-weight:400;letter-spacing:0}
+.toolbar-actions{display:flex;gap:10px}.listing-source{display:flex;align-items:center;gap:7px}.source-icon{flex:none}.rental-terms{margin:18px 0 0;font-size:15px}.rental-terms dt{color:var(--muted);margin-top:12px}.rental-terms dd{margin:3px 0 0;overflow-wrap:anywhere;white-space:pre-line}#sources-dialog{max-width:680px;max-height:calc(100dvh - 32px);overflow-y:auto}#sources-dialog h3{font-size:17px;margin:26px 0 4px}.source-list{list-style:none;margin:0;padding:0}.source-item{border-bottom:1px solid var(--line);padding:17px 0}.source-heading{display:flex;align-items:baseline;gap:10px;font-size:18px;font-weight:600}.source-heading a{color:var(--ink);text-underline-offset:4px;overflow-wrap:anywhere}.source-heading a:hover{color:var(--copper)}.source-status{display:block;color:var(--copper);font-size:14px;margin-top:7px}#sources-dialog .source-note{font-size:14px;margin:7px 0 0}.source-unavailable{padding:18px 0}.source-preview-note{border-left:3px solid var(--copper);padding-left:12px}
+@media(max-width:540px){.toolbar{flex-wrap:wrap}.toolbar-actions{width:100%;justify-content:flex-end}.rental-terms{font-size:14px}#sources-dialog{padding:23px}.source-heading{font-size:17px}}
+</style>
+<link rel="stylesheet" href="/static/prototype/listing-photos.css">
 </head>
 <body>
-  <header><a class="brand" href="/">w<span>↗</span> wohnung scout</a><span class="city">WÜRZBURG, DE</span><span id="connection">Loading…</span></header>
-  <main>
-    <section class="intro"><div><p class="eyebrow">MORE SPACE. LESS RENT.</p><h1>Find your<br><em>better place.</em></h1><p class="lede">See what your money can buy in Würzburg.<br>Choose your limits after you see the market.</p></div><aside><span class="label">YOUR CURRENT MONTHLY COST</span><strong id="current">—</strong><p>Enter your total, including utilities.<br>New apartment costs need checking.</p><a href="#preferences">Adjust your comparison ↗</a></aside></section>
-    <div id="notice" role="status" aria-live="polite"></div>
-    <section class="market"><div class="section-head"><div><p class="eyebrow">01 / THE MARKET</p><h2>What does good value look like?</h2></div><button id="refresh">Check for apartments ↻</button></div>
-      <div class="metrics"><div><span>Current listings in this sample</span><strong id="count">—</strong></div><div><span>Median listed rent</span><strong id="median-rent">—</strong></div><div><span>Median apartment size</span><strong id="median-size">—</strong></div><div><span>Median listed rent / m²</span><strong id="median-rate">—</strong></div></div>
-      <div class="chart-layout"><div class="chart-wrap"><div class="chart-top"><span>MONTHLY LISTED RENT (€)</span><span><i class="dot"></i> Below your estimated budget</span></div><svg id="chart" viewBox="0 0 760 380" role="img" aria-label="Apartment size versus listed monthly rent"></svg><p class="caption">Each dot is an apartment. Click one to see it. The line shows your budget minus your extra-cost reserve.</p></div><aside class="chart-notes"><h3>Look down.<br>Look right.</h3><p>Lower dots cost less.<br>Dots further right give you more space.</p><div class="tip"><strong>“Good value” is relative.</strong><p>A listing gets this label when its rent / m² is at least 10% below the median of similar-sized homes.</p></div><p class="small">At least 3 other homes within ±25% of its size are needed. Location, condition, and utility differences still matter.</p></aside></div>
-      <div id="size-bands" class="bands"></div>
-      <p class="caption">A snapshot of the first WG-Gesucht results pages for studios and apartments. Asking rents, not signed leases. Temporary lets excluded from market statistics. No full-market or availability guarantee.</p>
-    </section>
-    <section id="preferences" class="preferences"><div><p class="eyebrow">02 / YOUR COMPARISON</p><h2>Try a different budget.</h2><p>These limits control your shortlist and Telegram alerts.<br>The market chart still shows the wider sample.</p></div><form id="settings"><div class="inputs"><label>Maximum estimated total / month (€)<input name="budget" type="number" min="1" max="10000" required></label><label>Minimum size (m²)<input name="min_size" type="number" min="1" max="500" required></label><label>Extra-cost reserve / month (€)<input name="extra_costs" type="number" min="0" max="1000" required></label><label>Your current total / month (€)<input name="current_total" type="number" min="1" max="10000" required></label></div><div class="form-bottom"><label class="check"><input name="include_temporary" type="checkbox"> Include temporary lets in alerts</label><button class="primary" type="submit">Save limits →</button></div><p class="small">Estimated total = listed rent + your reserve. The €60 starting reserve is a placeholder, not a utility quote. Confirm heating, water, electricity, and internet with the landlord.</p></form></section>
-    <section><div class="section-head"><div><p class="eyebrow">03 / THE APARTMENTS</p><h2>Your next possibilities.</h2></div><label class="sort-label">Sort by <select id="sort"><option value="saving">Estimated savings</option><option value="value">Value for size</option><option value="size">Largest first</option><option value="new">Recently found</option></select></label></div><div class="tabs" role="group" aria-label="Filter listings"><button class="active" data-filter="matches">Within my limits</button><button data-filter="all">All current listings</button><button data-filter="saved">Saved</button><button data-filter="hidden">Hidden</button></div><div id="listings" class="listings" aria-live="polite"><p>Collecting the first apartments…</p></div></section>
-    <section class="telegram"><div class="telegram-mark">↗</div><div><p class="eyebrow">04 / GET THERE EARLY</p><h2>New matches, straight to Telegram.</h2><p id="telegram-status">Connect your bot to receive new matches.</p><p class="small">Up to 5 unnotified matches per check. Checks run every 30 minutes while this app is running.</p></div><div><code>./scripts/setup-telegram.sh</code><p class="small">Run this in the project terminal.<br>It guides you through bot setup.</p></div></section>
-    <footer><span>wohnung scout / a little more room to live.</span><span id="last-check">Waiting for first check</span></footer>
-  </main>
-  <script src="/static/app.js" defer></script>
+<header class="masthead"><div class="brand"><svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m3 10 8-7 8 7M5 9v11h5m-1 0v-6h2"/><circle cx="16.5" cy="16" r="3.5"/><path d="m19 18.5 3 3.5"/></svg>wohnung scout</div><div class="place">Würzburg</div></header>
+<main>
+<section class="intro"><h1>Compare apartments.</h1></section>
+<div class="toolbar"><label class="view-label"><select id="view" aria-label="Apartments to compare"><option value="matches">Within my limits</option><option value="all">All current apartments</option><option value="saved">Saved</option><option value="hidden">Hidden</option></select></label><div class="toolbar-actions"><button class="limits-button" id="open-sources">Sources</button><button class="limits-button" id="open-limits">Search limits</button></div></div>
+<div id="notice" role="alert"></div>
+<p class="limits-summary" id="count" role="status" aria-live="polite">Loading apartments</p>
+<table class="comparison" aria-label="Apartment comparison"><thead><tr><th>Apartment</th><th><button id="sort-total" aria-label="Reverse monthly cost sort">Estimated monthly total ↑</button></th><th>Space</th></tr></thead><tbody id="rows"></tbody></table>
+<div class="empty" id="empty" hidden>No apartments match these limits. Try a higher budget or a smaller minimum size.</div>
+<footer class="footnote"><p>Totals include your extra-cost reserve. Select an apartment to see the details. Availability and actual charges need confirmation.</p><p id="source">Loading local data</p></footer>
+</main>
+<dialog id="limits-dialog" aria-labelledby="limits-title"><form id="limits-form">
+<h2 id="limits-title">Your search limits.</h2><p id="limits-note">Saved limits apply to your apartment search and Telegram alerts.</p>
+<label class="field">Maximum monthly total (€)<input name="budget" type="number" min="1" max="10000" step="1" required></label>
+<label class="field">Minimum space (m²)<input name="min_size" type="number" min="1" max="500" step="1" required></label>
+<label class="field">Extra-cost reserve per month (€)<input name="extra_costs" type="number" min="0" max="1000" step="1" required><small>This is your allowance for unconfirmed costs, not a utility quote.</small></label>
+<label class="field">Your current monthly total (€)<input name="current_total" type="number" min="1" max="10000" step="1" required><small>Include your current utilities.</small></label>
+<label class="check"><input name="include_temporary" type="checkbox">Include temporary lets</label>
+<p id="limits-error" role="alert" hidden></p>
+<div class="dialog-actions"><button type="button" id="cancel-limits">Cancel</button><button class="apply" id="apply-limits" type="submit">Save limits</button></div>
+</form></dialog>
+<dialog id="sources-dialog" aria-labelledby="sources-title">
+<h2 id="sources-title">Apartment sources.</h2>
+<p>Website searches open the provider's page. Their offers do not enter this comparison or Telegram alerts.</p>
+<p id="sources-preview-note" class="source-preview-note" hidden>Comparison support shown here is part of the B1 preview. It does not activate sources in the live collector.</p>
+<div id="source-catalog"></div>
+<form method="dialog" class="dialog-actions"><button>Close</button></form>
+</dialog>
+<script src="/static/prototype/listing-photos.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const money=value=>new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(value);
+const state={mode:'loading',listings:[],sources:null,settings:null,selected:null,direction:1,busy:false};
+function element(tag,text,className){const node=document.createElement(tag);node.textContent=text;if(className)node.className=className;return node;}
+function safeUrl(value){try{const url=new URL(value);return ['http:','https:'].includes(url.protocol)&&!url.username&&!url.password?url.href:null;}catch{return null;}}
+function sourceLabel(name){
+  const label=element('div','','listing-source'),source=state.sources?.find(source=>source.name===name);
+  if(source?.icon){const icon=element('span',source.icon,'source-icon');icon.setAttribute('aria-hidden','true');label.append(icon);}
+  label.append(document.createTextNode(name));return label;
+}
+function renderSources(){
+  const catalog=$('source-catalog');catalog.replaceChildren();
+  $('sources-preview-note').hidden=state.mode!=='preview';
+  if(!state.sources?.length){catalog.append(element('p','The source catalog is unavailable. Reload the page to try again.','source-unavailable'));return;}
+  for(const [kind,title]of [['regular','Regular rentals'],['furnished','Furnished rentals']]){
+    const sources=state.sources.filter(source=>source.kind===kind);if(!sources.length)continue;
+    const section=document.createElement('section'),list=element('ul','','source-list');section.append(element('h3',title));
+    for(const source of sources){
+      const item=element('li','','source-item'),heading=element('div','','source-heading');
+      if(source.icon){const icon=element('span',source.icon,'source-icon');icon.setAttribute('aria-hidden','true');heading.append(icon);}
+      const url=safeUrl(source.url),name=element(url?'a':'span',source.name);
+      if(url){name.href=url;name.target='_blank';name.rel='noopener noreferrer';}
+      heading.append(name);item.append(heading,element('span',source.collection==='automatic'?'In comparison':'Website search','source-status'));
+      if(source.note)item.append(element('p',source.note,'source-note'));
+      list.append(item);
+    }
+    section.append(list);catalog.append(section);
+  }
+}
+async function api(path,body,timeout=15000){
+  const options={cache:'no-store',signal:AbortSignal.timeout(timeout)};
+  if(body!==undefined)Object.assign(options,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const response=await fetch(path,options);
+  const data=await response.json();
+  if(!response.ok)throw Error(data.error||'Request failed ('+response.status+').');
+  return data;
+}
+function visibleRows(){
+  const view=$('view').value;
+  return state.listings.filter(row=>row.housing_type==='entire_apartment').filter(row=>{
+    if(view==='saved')return row.status==='saved';
+    if(view==='hidden')return row.status==='hidden';
+    return row.currently_seen!==false&&row.status!=='hidden'&&(view==='all'||(row.monthly_charges_known!==false&&row.estimated_total<=state.settings.budget&&row.size>=state.settings.min_size&&(state.settings.include_temporary||!row.temporary)));
+  }).sort((a,b)=>(a.estimated_total-b.estimated_total)*state.direction);
+}
+function recalculate(){for(const row of state.listings){row.estimated_total=row.rent+state.settings.extra_costs;row.estimated_saving=state.settings.current_total-row.estimated_total;}}
+async function setStatus(row,status,button){
+  if(state.busy)return;
+  state.busy=true;button.disabled=true;$('notice').textContent='';
+  try{
+    if(state.mode==='production')await api('/api/listings/'+encodeURIComponent(row.id)+'/status',{status});
+    row.status=status;render();
+    (document.querySelector('[data-listing="'+CSS.escape(String(row.id))+'"]')||$('view')).focus({preventScroll:true});
+    $('notice').textContent=state.mode==='preview'?'Preview updated. Changes reset on reload.':status==='hidden'?'Apartment hidden. Find it in Hidden.':status==='saved'?'Apartment saved.':'Apartment restored.';
+  }catch(error){$('notice').textContent='Could not update this apartment. '+error.message;button.disabled=false;}finally{state.busy=false;}
+}
+function showDetails(row){
+  const tr=element('tr','','detail-row'),cell=document.createElement('td');cell.colSpan=3;
+  const body=element('div','','detail-body'),costs=element('dl','','cost-breakdown');
+  for(const [label,value]of [['Listed monthly rent',money(row.rent)],['Extra-cost reserve',money(state.settings.extra_costs)],['Your current total',money(state.settings.current_total)]])costs.append(element('dt',label),element('dd',value));
+  costs.append(element('dt','Rent basis'),element('dd',row.rent_basis||'Advertised'));
+  if(row.details_checked)for(const [label,key]of [['Base rent','base_rent'],['Service charges','service_costs'],['Other listed costs','other_costs'],['Deposit','deposit'],['Parking (confirm inclusion)','parking_costs']])costs.append(element('dt',label),element('dd',Number.isFinite(row[key])?money(row[key]):'Unknown'));
+  const copy=element('div','','detail-copy');
+  if(row.monthly_charges_known===false)copy.append(element('p','Monthly charges are unconfirmed. The total shown is a lower estimate; savings cannot be confirmed.'));
+  else copy.append(element('p',money(Math.abs(row.estimated_saving))+(row.estimated_saving>=0?' less':' more')+' than your current home each month.','saving'));
+  copy.append(element('p','This is an estimate. Confirm utilities, deposit, and availability in the original listing.'));
+  if(row.available)copy.append(element('p','Available '+row.available));
+  if(row.source_note)copy.append(element('p',row.source_note));
+  const terms=element('dl','','rental-terms');
+  if(Number.isFinite(row.minimum_stay_days))terms.append(element('dt','Minimum stay'),element('dd',row.minimum_stay_days+' days'));
+  for(const [label,key]of [['Included costs','included_costs'],['Additional costs','additional_costs'],['One-time fees','one_time_fees']])if(row[key])terms.append(element('dt',label),element('dd',row[key]));
+  if(terms.childElementCount)copy.append(terms);
+  if(row.currently_seen===false)copy.append(element('p','Not seen in the latest sample.'));
+  const actions=element('div','','detail-actions'),url=safeUrl(row.url);
+  if(url){const link=element('a','Open original listing ↗','open-link');link.href=url;link.target='_blank';link.rel='noopener noreferrer';actions.append(link);}
+  const save=element('button',row.status==='saved'?'Unsave':'Save','save-button');save.setAttribute('aria-pressed',String(row.status==='saved'));save.dataset.save=String(row.id);save.addEventListener('click',()=>setStatus(row,row.status==='saved'?'new':'saved',save));
+  const hide=element('button',row.status==='hidden'?'Restore':'Hide','save-button');hide.dataset.hide=String(row.id);hide.addEventListener('click',()=>setStatus(row,row.status==='hidden'?'new':'hidden',hide));
+  actions.append(save,hide);if(state.mode==='preview')actions.append(element('span','Preview only. Changes reset on reload.','preview-note'));
+  body.append(costs,copy,actions);cell.append(body);tr.append(cell);return tr;
+}
+function render(){
+  if(state.mode==='loading')return;
+  const rows=visibleRows();if(!rows.some(row=>row.id===state.selected))state.selected=null;
+  $('count').textContent=rows.length+' apartment'+(rows.length===1?'':'s');
+  $('sort-total').textContent='Estimated monthly total '+(state.direction===1?'↑':'↓');$('sort-total').closest('th').setAttribute('aria-sort',state.direction===1?'ascending':'descending');
+  $('rows').replaceChildren();$('empty').hidden=rows.length>0;
+  $('empty').textContent=$('view').value==='matches'?'No whole apartments match these limits. Try a higher budget or a smaller minimum size.':$('view').value==='saved'?'No saved apartments yet.':$('view').value==='hidden'?'No hidden apartments.':'No confirmed whole apartments in the current sample.';
+  for(const row of rows){
+    const selected=row.id===state.selected,tr=document.createElement('tr');tr.classList.toggle('chosen',selected);
+    const titleCell=document.createElement('td'),title=element('button',row.title,'apartment-button');title.dataset.listing=String(row.id);title.setAttribute('aria-expanded',String(selected));title.setAttribute('aria-label',(selected?'Close details for ':'View details for ')+row.title);title.addEventListener('click',()=>{state.selected=selected?null:row.id;render();document.querySelector('[data-listing="'+CSS.escape(String(row.id))+'"]').focus({preventScroll:true});});
+    const heading=element('div','','apartment-heading'),copy=element('div');copy.append(title,listingPhotos.location(row,'location'));if(row.source)copy.append(sourceLabel(row.source));if(row.temporary)copy.append(element('div','Temporary let','listing-status'));if(row.status==='saved')copy.append(element('div','Saved','listing-status'));heading.append(listingPhotos.forRow(row),copy);titleCell.append(heading);
+    const total=element('td','','total');total.append(element('span','Estimated monthly total','row-label'),document.createTextNode(money(row.estimated_total)));if(row.monthly_charges_known===false)total.append(element('span','Charges unconfirmed','row-label cost-warning'));
+    const size=element('td','','space');size.append(element('span','Space','row-label'),document.createTextNode(row.size+' m²'));
+    tr.append(titleCell,total,size);$('rows').append(tr);if(selected)$('rows').append(showDetails(row));
+  }
+}
+$('open-limits').disabled=true;$('view').disabled=true;$('sort-total').disabled=true;
+$('open-sources').addEventListener('click',()=>{renderSources();$('sources-dialog').showModal();});
+$('open-limits').addEventListener('click',()=>{
+  for(const [key,value]of Object.entries(state.settings)){const input=$('limits-form').elements[key];if(!input)continue;if(input.type==='checkbox')input.checked=value;else input.value=value;}
+  $('limits-error').hidden=true;$('limits-dialog').showModal();
+});
+$('cancel-limits').addEventListener('click',()=>$('limits-dialog').close());
+$('limits-form').addEventListener('submit',async event=>{
+  event.preventDefault();const form=event.target,settings={};
+  for(const key of ['budget','min_size','extra_costs','current_total'])settings[key]=Number(form.elements[key].value);
+  settings.include_temporary=form.elements.include_temporary.checked;
+  $('apply-limits').disabled=true;$('limits-error').hidden=true;
+  try{
+    const result=state.mode==='production'?await api('/api/settings',settings):{settings};
+    state.settings=result.settings;recalculate();$('limits-dialog').close();render();
+    $('notice').textContent=state.mode==='preview'?'Preview limits applied. Changes reset on reload.':'Limits saved. Telegram uses these limits at the next check.';
+  }catch(error){$('limits-error').textContent='Could not save limits. '+error.message;$('limits-error').hidden=false;}
+  finally{$('apply-limits').disabled=false;}
+});
+$('sort-total').addEventListener('click',()=>{state.direction*=-1;render();});$('view').addEventListener('change',render);
+async function load(){
+  try{
+    const data=await api('/api/state');if(state.busy)return;if(!Array.isArray(data.listings)||!data.settings)throw Error('Unexpected apartment data.');
+    state.mode=data.preview===true?'preview':'production';state.listings=data.listings;state.sources=Array.isArray(data.sources)?data.sources:null;state.settings=data.settings;
+    $('open-limits').disabled=false;$('view').disabled=false;$('sort-total').disabled=false;
+    $('source').textContent=state.mode==='preview'?'Read-only preview':data.scanning?'Checking public sources':data.last_check?'Last check '+new Date(data.last_check).toLocaleString():'Waiting for the first check';
+    $('limits-note').textContent=state.mode==='preview'?'Changes reset on reload. Your actual search and alerts stay unchanged.':'Saved limits apply to your apartment search and Telegram alerts.';
+    $('apply-limits').textContent=state.mode==='preview'?'Apply to preview':'Save limits';
+    const errors=[...(data.errors||[]),data.telegram_error].filter(Boolean);if(errors.length)$('notice').textContent=errors.join(' ');
+    renderSources();render();if(state.mode==='preview'){listingPhotos.hydrate(state.listings);loadSources();}
+  }catch(error){$('notice').textContent='Could not load apartments. '+error.message;$('count').textContent=state.mode==='loading'?'Apartments unavailable':$('count').textContent;$('source').textContent='Local data unavailable';}
+}
+async function loadSources(){
+  $('source').textContent='Checking additional public sources';
+  try{
+    const data=await api('/api/sources',undefined,60000);
+    if(!Array.isArray(data.listings))throw Error('Unexpected source data.');
+    const ids=new Set(state.listings.map(row=>row.id));
+    state.listings.push(...data.listings.filter(row=>!ids.has(row.id)));
+    recalculate();render();
+    if(data.errors?.length)$('notice').textContent=[$('notice').textContent,...data.errors].filter(Boolean).join(' ');
+    $('source').textContent='Read-only preview';
+  }catch(error){$('source').textContent='Additional sources unavailable';$('notice').textContent=[$('notice').textContent,'Could not load additional sources. '+error.message].filter(Boolean).join(' ');}
+}
+load();setInterval(()=>{if(state.mode!=='preview'&&!state.busy&&!document.hidden&&!$('limits-dialog').open)load();},30000);
+</script>
 </body>
 </html>

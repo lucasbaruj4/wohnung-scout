@@ -44,8 +44,9 @@ def notify(row):
     config = credentials()
     if not all(config.values()):
         return False
-    text = (f"Würzburg · {row['size']:g} m²\n{row['title'][:220]}\n"
+    text = (f"Würzburg\n{row['size']:g} m²\n{row['title'][:220]}\n"
             f"Listed rent: €{row['rent']:g}\nEstimated monthly total: €{row['estimated_total']:g}\n"
+            f"Rent basis: {row['rent_basis']}\n"
             f"Estimated saving vs current home: €{row['estimated_saving']:g}/month\n"
             "Extra costs are a reserve, not verified utility charges.\n" + row["url"])
     call(config["TELEGRAM_BOT_TOKEN"], "sendMessage", {"chat_id": config["TELEGRAM_CHAT_ID"], "text": text})

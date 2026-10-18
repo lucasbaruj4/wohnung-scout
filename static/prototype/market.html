@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wohnung Scout · Market explorer</title>
+<style>
+:root{color-scheme:dark;--bg:#112721;--panel:#18332b;--paper:#f0ead9;--muted:#a9bbb0;--line:#365046;--lime:#d9e49b;--rust:#e8a282;--serif:Georgia,'Times New Roman',serif;--sans:'Trebuchet MS',Verdana,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--paper);font:14px/1.5 var(--sans)}button,input,a{font:inherit}button,a,input{outline-offset:5px}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--lime)}button{cursor:pointer}a{color:inherit}button{color:inherit}header{display:flex;align-items:center;gap:25px;padding:19px 36px;border-bottom:1px solid var(--line)}.brand{font-size:18px;letter-spacing:-.7px}.brand span{color:var(--lime);margin-right:8px}.city,.eyebrow,.micro{font-size:10px;text-transform:uppercase;letter-spacing:1.8px}.city{color:var(--muted);border-left:1px solid var(--line);padding-left:25px}.status{margin-left:auto;font-size:11px;color:var(--muted)}.status:before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--lime);margin-right:8px}main{max-width:1440px;margin:auto;padding:24px 36px 86px}.intro{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:23px}.eyebrow{color:var(--lime);margin:0 0 6px}h1{font:42px/1.06 var(--serif);font-weight:400;letter-spacing:-1.8px;margin:0}h1 em{font-weight:400;color:var(--lime)}.intro p:last-child{margin:0;color:var(--muted);font-size:12px}.controls{display:flex;gap:25px;align-items:center;padding:17px 0;border-block:1px solid var(--line)}.control{display:flex;align-items:center;gap:12px}.control label{font-size:11px;color:var(--muted)}.number{display:flex;gap:6px;align-items:center;color:var(--lime)}.number input{background:transparent;border:0;border-bottom:1px solid var(--line);color:var(--paper);width:65px;padding:3px 0;font-size:17px}.toggle{display:flex;margin-left:auto;gap:3px;padding:3px;background:#0c211b;border-radius:4px}.toggle button{border:0;background:transparent;padding:8px 14px;border-radius:3px;font-size:11px;color:var(--muted)}.toggle button[aria-pressed=true]{background:var(--lime);color:var(--bg)}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 290px;border-bottom:1px solid var(--line)}.plot-panel{padding:21px 28px 12px 0;min-width:0}.chart-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.chart-heading h2{font:21px var(--serif);margin:0}.count{color:var(--muted);font-size:11px}.plot{width:100%;height:330px;display:block;overflow:visible}.grid{stroke:var(--line);stroke-width:1}.axis{fill:var(--muted);font-size:11px;font-family:var(--sans)}.axis-title{font-size:10px;letter-spacing:1px}.dot{stroke:var(--bg);stroke-width:2;cursor:pointer;transition:r .18s,opacity .18s}.dot:hover,.dot:focus{r:9;outline:none;stroke:var(--paper);stroke-width:2}.dot.selected{stroke:var(--paper);stroke-width:2.5}.legend{display:flex;gap:20px;align-items:center;flex-wrap:wrap;font-size:10px;color:var(--muted)}.legend span{display:flex;align-items:center;gap:6px}.legend i{height:7px;width:7px;border-radius:50%;background:var(--lime)}.legend .outside{background:#708e7e}.legend .limit{height:0;width:17px;border-radius:0;border-top:1px dashed var(--rust);background:none}.hint{font-size:10px;color:var(--muted);margin:12px 0 0}.detail{border-left:1px solid var(--line);padding:22px 0 18px 25px;display:flex;flex-direction:column;min-width:0}.detail .micro{color:var(--muted);display:flex;justify-content:space-between}.selection-mark{color:var(--lime);font-size:18px;line-height:1}.detail h2{font:27px/1.1 var(--serif);font-weight:400;letter-spacing:-.5px;margin:16px 0 6px;overflow-wrap:anywhere}.location{color:var(--muted);font-size:12px;margin:0 0 19px}.price{font:43px/1 var(--serif);letter-spacing:-2px;color:var(--lime)}.price small{font:11px var(--sans);letter-spacing:0;color:var(--muted);margin-left:7px}.reserve{font-size:10px;color:var(--muted);margin:8px 0 17px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 0;border-block:1px solid var(--line)}.facts strong{font-size:19px;font-weight:400;display:block}.facts span{font-size:10px;color:var(--muted)}.assessment{font-size:11px;color:var(--lime);margin:13px 0 18px}.detail-actions{display:flex;gap:8px;margin-top:auto}.save,.external{display:inline-flex;justify-content:center;align-items:center;text-decoration:none;border:1px solid var(--line);background:transparent;padding:10px 12px;font-size:11px}.save{min-width:67px}.external{flex:1;background:var(--lime);color:var(--bg);border-color:var(--lime)}.external[hidden]{display:none}.strip-heading{display:flex;align-items:baseline;justify-content:space-between;margin:22px 0 12px}.strip-heading h2{font:21px var(--serif);font-weight:400;margin:0}.strip-heading span{color:var(--muted);font-size:10px}.homes{display:grid;grid-auto-flow:column;grid-auto-columns:215px;overflow-x:auto;gap:12px;padding:2px 2px 12px;scrollbar-color:var(--line) var(--bg)}.home{position:relative;min-height:112px;background:transparent;border:1px solid var(--line);padding:13px 14px;text-align:left;border-radius:2px}.home[aria-pressed=true]{border-color:var(--lime);background:var(--panel)}.home-top{display:flex;justify-content:space-between;gap:8px}.home strong{font-size:18px;color:var(--paper);font-weight:400}.home-top span{font-size:12px;color:var(--muted)}.home-title{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;margin:9px 0 3px}.home small{font-size:10px;color:var(--muted)}.empty{padding:25px 0;color:var(--muted)}footer{display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:10px;margin-top:12px}.note{color:var(--rust)}
+header{padding-block:16px}main{padding-bottom:65px}.plot{height:280px}.detail h2{margin-top:12px}.location{margin-bottom:12px}.price{font-size:39px}.reserve{margin:7px 0 12px}.facts{padding:11px 0}.assessment{margin:11px 0 14px}.home{min-height:98px}.strip-heading{margin:17px 0 10px}
+@media(min-width:1500px){main{padding-top:36px}.plot{height:370px}}@media(max-width:900px){header{padding:18px 22px}main{padding:22px 22px 85px}.workspace{grid-template-columns:minmax(0,1fr) 250px}.detail{padding-left:20px}.plot-panel{padding-right:18px}.intro p:last-child{max-width:220px}.controls{gap:15px}.control{gap:7px}.toggle button{padding:8px}.plot{height:320px}}
+@media(max-width:680px){header{padding:16px 18px;gap:15px}.city{padding-left:15px;font-size:9px}.status{display:none}main{padding:22px 18px 85px}.intro{display:block;margin-bottom:20px}h1{font-size:38px}.intro p:last-child{margin-top:12px;max-width:none}.controls{flex-wrap:wrap;gap:12px 22px}.control{gap:9px}.toggle{margin-left:0;width:100%}.toggle button{flex:1}.workspace{display:block}.plot-panel{padding:21px 0 17px}.plot{height:auto;min-height:260px}.chart-heading h2{font-size:20px}.detail{border-left:0;border-top:1px solid var(--line);padding:20px 0}.detail h2{margin-top:12px;font-size:26px}.detail .location{margin-bottom:13px}.facts{max-width:300px}.detail-actions{margin-top:0;max-width:340px}.assessment{margin-bottom:15px}footer{display:block}footer span{display:block;margin-top:5px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="brand"><span>↗</span>wohnung scout</div><div class="city">Würzburg, DE</div><div class="status" id="source">Loading local listings</div></header>
+<main>
+<div class="intro"><div><p class="eyebrow">A little more room to live</p><h1>Find <em>your opening.</em></h1></div><p>Less rent. More space.<br>Choose a dot to see the apartment.</p></div>
+<div class="controls" aria-label="Preview limits">
+  <div class="control"><label for="budget">Monthly budget</label><div class="number">€ <input id="budget" type="number" min="1" max="10000" step="25" value="850"></div></div>
+  <div class="control"><label for="minimum">Minimum space</label><div class="number"><input id="minimum" type="number" min="1" max="500" value="30"> m²</div></div>
+  <div class="toggle" role="group" aria-label="Apartment view"><button data-filter="all" aria-pressed="true">The market</button><button data-filter="matches" aria-pressed="false">Within limits</button><button data-filter="saved" aria-pressed="false">Saved <span id="saved-count">0</span></button></div>
+</div>
+<div class="workspace">
+  <section class="plot-panel" aria-label="Price and size comparison"><div class="chart-heading"><h2>What your money buys</h2><span id="plot-count" class="count"></span></div><svg class="plot" id="chart" viewBox="0 0 790 350" role="group" aria-label="Interactive apartment chart. Horizontal axis is size in square metres. Vertical axis is estimated monthly total in euros."></svg><div class="legend"><span><i></i> Within your limits</span><span><i class="outside"></i> Outside your limits</span><span><i class="limit"></i> Your limits</span></div><p class="hint">Each dot is one apartment. Lower costs less. Further right gives you more space.</p></section>
+  <aside class="detail" aria-label="Selected apartment" aria-live="polite"><div class="micro">Selected apartment <span class="selection-mark">↗</span></div><h2 id="detail-title">Loading apartments</h2><p class="location" id="location"></p><div class="price"><span id="total">…</span><small>/ month</small></div><p class="reserve" id="reserve"></p><div class="facts"><div><strong id="size">…</strong><span>Living space</span></div><div><strong id="rent">…</strong><span>Listed rent</span></div></div><p class="assessment" id="assessment"></p><div class="detail-actions"><button class="save" id="save">Save ♡</button><a class="external" id="listing" target="_blank" rel="noopener noreferrer">View listing ↗</a></div></aside>
+</div>
+<section aria-label="Available apartments"><div class="strip-heading"><h2>Take a closer look</h2><span id="strip-count"></span></div><div id="homes" class="homes"></div></section>
+<footer><span>UI preview · changes stay in this preview</span><span id="data-note" class="note">Reading the local sample</span></footer>
+</main>
+<script>
+'use strict';
+const ui={listings:[],settings:{budget:850,min_size:30,extra_costs:60,current_total:1000},filter:'all',selected:null,saved:new Set(),example:false};
+const $=id=>document.getElementById(id);
+const euro=n=>new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
+const text=(tag,value,cls)=>{const node=document.createElement(tag);node.textContent=value;if(cls)node.className=cls;return node;};
+const total=row=>row.rent+ui.settings.extra_costs;
+const matches=row=>total(row)<=ui.settings.budget&&row.size>=ui.settings.min_size;
+function visible(){return ui.listings.filter(row=>ui.filter==='all'||(ui.filter==='matches'?matches(row):ui.saved.has(row.id)));}
+function choose(id){ui.selected=id;render();}
+function render(){
+  const rows=visible();
+  if(!rows.some(row=>row.id===ui.selected))ui.selected=rows.find(matches)?.id??rows[0]?.id??null;
+  $('saved-count').textContent=ui.saved.size;
+  document.querySelectorAll('[data-filter]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.filter===ui.filter)));
+  $('plot-count').textContent=`${rows.length} apartments`;
+  $('strip-count').textContent='Select a home to compare';
+  drawChart(rows);drawDetail(rows.find(row=>row.id===ui.selected));
+  const homes=$('homes');homes.replaceChildren();
+  if(!rows.length){homes.append(text('p',ui.filter==='saved'?'No saved apartments yet. Save a home from the market.':'No apartments in this view. Try a higher budget or a smaller minimum size.','empty'));return;}
+  for(const row of rows){
+    const button=text('button','','home');button.setAttribute('aria-pressed',String(row.id===ui.selected));
+    const top=text('div','','home-top');top.append(text('strong',euro(total(row))),text('span',`${row.size} m²`));
+    button.append(top,text('span',row.title,'home-title'),text('small',`${ui.saved.has(row.id)?'Saved · ':''}${row.location||'Würzburg'}`));
+    button.addEventListener('click',()=>choose(row.id));homes.append(button);
+  }
+}
+function drawChart(rows){
+  const svg=$('chart');svg.replaceChildren();
+  const make=(tag,attributes,value)=>{const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,val] of Object.entries(attributes))node.setAttribute(key,String(val));if(value!==undefined)node.textContent=value;svg.append(node);return node;};
+  const xmax=Math.ceil(Math.max(100,ui.settings.min_size,...ui.listings.map(row=>row.size))/25)*25;
+  const ymax=Math.ceil(Math.max(1250,ui.settings.budget,...ui.listings.map(total))/250)*250;
+  const x=value=>57+value/xmax*690,y=value=>292-value/ymax*245;
+  make('rect',{x:x(ui.settings.min_size),y:y(ui.settings.budget),width:Math.max(0,x(xmax)-x(ui.settings.min_size)),height:292-y(ui.settings.budget),fill:'#d9e49b','fill-opacity':'.035'});
+  for(let i=0;i<=4;i++){
+    const price=ymax*i/4,size=xmax*i/4;
+    make('line',{x1:57,x2:747,y1:y(price),y2:y(price),class:'grid'});
+    make('text',{x:45,y:y(price)+4,'text-anchor':'end',class:'axis'},Math.round(price));
+    make('text',{x:x(size),y:315,'text-anchor':'middle',class:'axis'},Math.round(size));
+  }
+  make('text',{x:57,y:20,class:'axis axis-title'},'ESTIMATED TOTAL / MONTH (€)');
+  make('text',{x:747,y:343,'text-anchor':'end',class:'axis axis-title'},'LIVING SPACE (m²)');
+  make('line',{x1:57,x2:747,y1:y(ui.settings.budget),y2:y(ui.settings.budget),stroke:'#e8a282','stroke-dasharray':'5 6'});
+  make('line',{x1:x(ui.settings.min_size),x2:x(ui.settings.min_size),y1:39,y2:292,stroke:'#e8a282','stroke-dasharray':'5 6'});
+  make('text',{x:741,y:y(ui.settings.budget)-8,'text-anchor':'end',class:'axis',fill:'#e8a282'},`${euro(ui.settings.budget)} budget`);
+  make('text',{x:x(ui.settings.min_size)+8,y:41,class:'axis'},`${ui.settings.min_size} m² minimum`);
+  if(!rows.length)make('text',{x:410,y:190,'text-anchor':'middle',class:'axis'},'No apartments in this view');
+  for(const row of rows){
+    const selected=row.id===ui.selected;
+    if(selected)make('circle',{cx:x(row.size),cy:y(total(row)),r:15,fill:'none',stroke:'#d9e49b','stroke-opacity':'.25'});
+    const dot=make('circle',{cx:x(row.size),cy:y(total(row)),r:selected?8:6,fill:matches(row)?'#d9e49b':'#708e7e',class:`dot${selected?' selected':''}`,tabindex:0,role:'button','aria-pressed':selected,'aria-label':`${row.title}, ${row.size} square metres, ${euro(total(row))} estimated monthly total`});
+    const title=document.createElementNS(svg.namespaceURI,'title');title.textContent=`${row.title} · ${row.size} m² · ${euro(total(row))}`;dot.append(title);
+    dot.addEventListener('click',()=>choose(row.id));dot.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose(row.id);svg.querySelector('[aria-pressed="true"]')?.focus();}});
+  }
+}
+function drawDetail(row){
+  $('save').disabled=!row;$('listing').hidden=!row||!safeLink(row.url);
+  if(!row){$('detail-title').textContent='No home selected';for(const id of ['location','total','reserve','size','rent','assessment'])$(id).textContent='';return;}
+  $('detail-title').textContent=row.title;$('location').textContent=row.location||'Würzburg';
+  $('total').textContent=euro(total(row));$('reserve').textContent=`Includes ${euro(ui.settings.extra_costs)} reserve. Confirm utilities.`;
+  $('size').textContent=`${row.size} m²`;$('rent').textContent=euro(row.rent);
+  const saving=ui.settings.current_total-total(row);
+  $('assessment').textContent=`${matches(row)?'Within your limits':'Outside your limits'} · ${euro(Math.abs(saving))} ${saving>=0?'less':'more'} than your current total`;
+  $('save').textContent=ui.saved.has(row.id)?'Saved ✓':'Save ♡';
+  if(safeLink(row.url))$('listing').href=row.url;
+}
+function safeLink(value){try{return ['http:','https:'].includes(new URL(value).protocol);}catch{return false;}}
+function example(){
+  const samples=[[25,440,'Compact studio','Sanderau'],[31,530,'A quiet place for one','Zellerau'],[36,590,'Room for a fresh start','Grombühl'],[44,670,'Light-filled two-room home','Frauenland'],[52,735,'Space to make your own','Heidingsfeld'],[62,840,'A little room to grow','Zellerau'],[72,980,'Two rooms with a balcony','Sanderau'],[87,1130,'Open-plan living','Frauenland'],[28,610,'Small and central','Altstadt'],[40,780,'Home above the rooftops','Altstadt'],[56,970,'Bright corner apartment','Grombühl'],[67,1090,'Room for a home office','Frauenland'],[34,675,'A slower pace','Lengfeld'],[48,790,'Garden-facing apartment','Heidingsfeld'],[78,890,'More space, further out','Lengfeld'],[95,1190,'Three rooms to settle in','Versbach']];
+  ui.listings=samples.map(([size,rent,title,location],index)=>({id:`example-${index}`,size,rent,title,location:`${location}, Würzburg`,url:'',status:'new'}));ui.example=true;
+  $('source').textContent='Synthetic example data';$('data-note').textContent='Synthetic examples · not real apartment advertisements';
+}
+async function load(){
+  try{
+    const response=await fetch('/api/state');if(!response.ok)throw new Error('Cannot read listings');const data=await response.json();
+    if(!Array.isArray(data.listings)||!data.settings)throw new Error('Invalid listing data');
+    for(const key of Object.keys(ui.settings))if(Number.isFinite(data.settings[key]))ui.settings[key]=data.settings[key];
+    ui.listings=data.listings.filter(row=>row.currently_seen&&!row.temporary&&row.status!=='hidden'&&Number.isFinite(row.rent)&&row.rent>=0&&Number.isFinite(row.size)&&row.size>0);
+    ui.saved=new Set(ui.listings.filter(row=>row.status==='saved').map(row=>row.id));
+    $('source').textContent=data.scanning?'Local collector · checking sources':'Local collector · computer only';
+    $('data-note').textContent=`WG-Gesucht sample · ${ui.listings.length} current, non-temporary listings · availability needs confirmation`;
+  }catch{example();}
+  $('budget').value=ui.settings.budget;$('minimum').value=ui.settings.min_size;render();
+}
+for(const [id,key] of [['budget','budget'],['minimum','min_size']])$(id).addEventListener('input',event=>{const value=Number(event.target.value);if(event.target.validity.valid&&value>0){ui.settings[key]=value;render();}});
+document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{ui.filter=button.dataset.filter;render();}));
+$('save').addEventListener('click',()=>{if(ui.selected===null)return;ui.saved.has(ui.selected)?ui.saved.delete(ui.selected):ui.saved.add(ui.selected);render();});
+load();
+</script>
+</body>
+</html>
