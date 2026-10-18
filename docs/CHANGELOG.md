@@ -1,4 +1,6 @@
 ## 2026-10-18
+- Replaced the comparison dropdown with a Within my limits / Go crazy toggle and a separate Saved destination.
+- Kept saved apartments outside limits and older saved offers accessible, with Hidden available for restoration.
 - Added a single eleven-provider catalog with source icons and a Sources dialog.
 - Added public HC24 furnished apartment parsing, real photos, minimum stays, and additional-cost notes.
 - Kept HC24 charges unconfirmed and excluded temporary offers from default comparisons and alerts.

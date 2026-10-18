@@ -5,6 +5,12 @@ The dashboard uses a dark palette with high-contrast text.
 Photos are 280 × 210 pixels on desktop and fill the apartment row on phones.
 Titles remain 20 pixels and totals remain 28 pixels.
 Select a title for the cost breakdown, Save, Hide, or the original listing.
+Compare has a two-part Within my limits / Go crazy toggle. Go crazy shows the
+current apartments that fail at least one search condition, including unconfirmed
+charges. Switching views does not change search settings or alerts.
+Saved has its own navigation button. It includes saved apartments outside the
+limits and those no longer in the latest sample. Hidden remains accessible for
+restoring apartments. Returning to Compare preserves the selected toggle position.
 Search limits contain the budget, size, reserve, current costs, and temporary-let setting.
 Sources opens a dialog with eleven provider icons and links. It distinguishes
 automatic sources from website searches. Website searches do not supply the
@@ -42,7 +48,7 @@ Only whole apartments qualify. WG-Gesucht remains a source alongside
 and [Frauenland](https://www.wg-frauenland.de/mieten/).
 HC24 adds furnished whole apartments from public embedded page data. These are
 temporary lets with unconfirmed additional charges and are excluded from matches.
-The All current apartments view shows them with their published costs and minimum
+The Go crazy view shows them with their published costs and minimum
 stay when available. Provider-hosted photos use the same honest missing-photo state.
 Frauenland is a housing cooperative, not a shared-flat category.
 Its offers require membership; unquoted share costs remain unknown.

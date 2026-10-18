@@ -1,4 +1,8 @@
 ## 2026-10-18
+- Root | Problem: Visible comparison toggle and saved apartments | Scope: design selection, documentation, browser verification and delivery - DONE
+- Navigation design agents | Problem: Separate saved homes from comparison filters | Scope: two independent read-only control and state designs - DONE
+- Navigation UI agent | Problem: Dropdown replacement and Saved destination | Scope: static/index.html controls, filtering and focus - DONE
+- Navigation reviewer | Problem: Preserve comparison, saved and hidden behavior | Scope: independent correctness, focus, comment and prose review - DONE
 - Root | Problem: Add all eleven apartment sources with icons | Scope: source catalog, B1 integration, verification and documentation - DONE
 - Regular source access agent | Problem: Verify five regular rental providers | Scope: public access, collection policy and architecture inspection - DONE
 - Furnished source access agent | Problem: Verify three furnished rental providers | Scope: public access, listing data and architecture inspection - DONE
