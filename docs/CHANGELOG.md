@@ -1,3 +1,10 @@
+## 2026-10-18
+- Added a single eleven-provider catalog with source icons and a Sources dialog.
+- Added public HC24 furnished apartment parsing, real photos, minimum stays, and additional-cost notes.
+- Kept HC24 charges unconfirmed and excluded temporary offers from default comparisons and alerts.
+- Added seven clearly labeled website searches where automated collection is blocked or unverified.
+- Exposed source metadata in production and preview state without collecting on a state read.
+
 ## 2026-10-17
 - Added a small home-search icon beside the dashboard name.
 - Added Frauenland cooperative apartment offers with explicit rent costs and membership requirements.

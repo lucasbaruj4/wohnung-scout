@@ -10,7 +10,7 @@ spec = importlib.util.spec_from_file_location(
     "preview_ui", Path(__file__).resolve().parents[1] / "scripts/preview-ui.py")
 preview = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(preview)
-from scout import BASE, DEFAULTS, OHNE, parse_search
+from scout import BASE, DEFAULTS, OHNE, parse_search, source_catalog
 from tests.test_scout import SEARCH
 from tests.test_whole_apartments import OM_SEARCH, OM_DETAIL, OM_URL
 
@@ -31,6 +31,7 @@ class PreviewTests(unittest.TestCase):
             opener.return_value.open.return_value = io.BytesIO(payload)
             response = self.client.get('/api/state')
         self.assertIs(response.json['preview'], True)
+        self.assertEqual(response.json['sources'], source_catalog())
         self.assertEqual([r['id'] for r in response.json['listings']], ['123'])
         self.assertEqual(self.client.post('/api/settings', json=DEFAULTS).status_code, 404)
         self.assertEqual(self.client.post('/api/listings/123/status', json={'status': 'saved'}).status_code, 404)

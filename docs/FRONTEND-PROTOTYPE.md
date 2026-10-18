@@ -6,6 +6,10 @@ Photos are 280 × 210 pixels on desktop and fill the apartment row on phones.
 Titles remain 20 pixels and totals remain 28 pixels.
 Select a title for the cost breakdown, Save, Hide, or the original listing.
 Search limits contain the budget, size, reserve, current costs, and temporary-let setting.
+Sources opens a dialog with eleven provider icons and links. It distinguishes
+automatic sources from website searches. Website searches do not supply the
+comparison or alerts. The preview explains that its source support belongs to
+this branch and does not activate providers in the running app.
 
 Run this branch without starting a second collector:
 
@@ -36,6 +40,10 @@ remain on the prototype branch for reference.
 Only whole apartments qualify. WG-Gesucht remains a source alongside
 [ohne-makler](https://www.ohne-makler.net/immobilien/wohnung-mieten/bayern/kreis-wuerzburg-stadt/)
 and [Frauenland](https://www.wg-frauenland.de/mieten/).
+HC24 adds furnished whole apartments from public embedded page data. These are
+temporary lets with unconfirmed additional charges and are excluded from matches.
+The All current apartments view shows them with their published costs and minimum
+stay when available. Provider-hosted photos use the same honest missing-photo state.
 Frauenland is a housing cooperative, not a shared-flat category.
 Its offers require membership; unquoted share costs remain unknown.
 Its current illustrations and floor plans are not shown as apartment photos.

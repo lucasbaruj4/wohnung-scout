@@ -24,7 +24,11 @@ const listingPhotos = {
       const wgPhoto = ['www.wg-gesucht.de', 'img.wg-gesucht.de'].includes(url.hostname) && url.pathname.startsWith('/media/up/');
       const omPhoto = url.hostname === 'media.ohne-makler.net' ||
         (url.hostname === 'www.ohne-makler.net' && /^\/immobilie\/\d+\/picture\//.test(url.pathname));
-      if (url.protocol !== 'https:' || url.username || url.password || !(wgPhoto || omPhoto)) throw Error('Not a listing photo');
+      const hc24Photo = url.hostname === 'hc24-media-new.s3.eu-central-1.amazonaws.com' &&
+        /^\/hcwu\/\d+_\d+\.jpg$/.test(url.pathname) &&
+        url.pathname.startsWith('/hcwu/' + String(row.id).replace(/^hc24:wu/, '') + '_') &&
+        /^hc24:wu\d+$/.test(String(row.id));
+      if (url.protocol !== 'https:' || url.username || url.password || !(wgPhoto || omPhoto || hc24Photo)) throw Error('Not a listing photo');
     } catch {
       missing();
       return frame;

@@ -12,7 +12,7 @@ from flask import Flask, Response, send_from_directory
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scout import BASE, SEARCHES, evaluate, parse_detail, parse_search
+from scout import BASE, SEARCHES, evaluate, parse_detail, parse_search, source_catalog
 
 app = Flask(__name__, static_folder=str(ROOT / "static"))
 photo_cache = {}
@@ -35,6 +35,7 @@ def state():
             data = json.load(result)
         data["preview"] = True
         data["listings"] = evaluate(data["listings"], data["settings"])
+        data["sources"] = source_catalog()
         return data
     except URLError:
         return {"error": "The local app is unavailable. Start it to view apartment data."}, 503

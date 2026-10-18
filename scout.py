@@ -16,12 +16,53 @@ from bs4 import BeautifulSoup
 BASE = "https://www.wg-gesucht.de"
 OHNE = "https://www.ohne-makler.net"
 FRAUENLAND = "https://www.wg-frauenland.de"
-SEARCHES = (
-    ("WG-Gesucht studios", f"{BASE}/1-zimmer-wohnungen-in-Wuerzburg.141.1.1.0.html"),
-    ("WG-Gesucht apartments", f"{BASE}/wohnungen-in-Wuerzburg.141.2.1.0.html"),
-    ("ohne-makler apartments", f"{OHNE}/immobilien/wohnung-mieten/bayern/kreis-wuerzburg-stadt/"),
-    ("Frauenland apartments", f"{FRAUENLAND}/mieten/"),
+HC24 = "https://www.hc24.de"
+SOURCES = (
+    {"id": "wg-gesucht", "name": "WG-Gesucht", "icon": "🏠",
+     "url": f"{BASE}/wohnungen-in-Wuerzburg.141.2.1.0.html",
+     "kind": "regular", "collection": "automatic", "note": "Studios and whole apartments.",
+     "searches": (("WG-Gesucht studios", f"{BASE}/1-zimmer-wohnungen-in-Wuerzburg.141.1.1.0.html"),
+                  ("WG-Gesucht apartments", f"{BASE}/wohnungen-in-Wuerzburg.141.2.1.0.html"))},
+    {"id": "ohne-makler", "name": "ohne-makler", "icon": "🔑",
+     "url": f"{OHNE}/immobilien/wohnung-mieten/bayern/kreis-wuerzburg-stadt/",
+     "kind": "regular", "collection": "automatic", "note": "Whole apartments in Würzburg city.",
+     "searches": (("ohne-makler apartments", f"{OHNE}/immobilien/wohnung-mieten/bayern/kreis-wuerzburg-stadt/"),)},
+    {"id": "frauenland", "name": "Frauenland", "icon": "🏘️", "url": f"{FRAUENLAND}/mieten/",
+     "kind": "regular", "collection": "automatic", "note": "Cooperative membership required.",
+     "searches": (("Frauenland apartments", f"{FRAUENLAND}/mieten/"),)},
+    {"id": "immoscout24", "name": "ImmoScout24", "icon": "🏢",
+     "url": "https://www.immobilienscout24.de/Suche/de/bayern/wuerzburg/wohnung-mieten",
+     "kind": "regular", "collection": "website", "note": "Browse apartment offers on the provider website."},
+    {"id": "kleinanzeigen", "name": "Kleinanzeigen", "icon": "📣",
+     "url": "https://www.kleinanzeigen.de/s-wohnung-mieten/c203l7667",
+     "kind": "regular", "collection": "website", "note": "Check that the offer is a whole apartment."},
+    {"id": "immowelt", "name": "Immowelt", "icon": "🌍",
+     "url": "https://www.immowelt.de/suche/mieten/wohnung/bayern/wurzburg-97070/ad08de7873",
+     "kind": "regular", "collection": "website", "note": "Browse apartment offers on the provider website."},
+    {"id": "stadtbau", "name": "Stadtbau Würzburg", "icon": "🏙️",
+     "url": "https://stadtbau-wuerzburg.de/wohnungssuche/",
+     "kind": "regular", "collection": "website", "note": "Apartment search through Immomio."},
+    {"id": "main-post", "name": "Main-Post", "icon": "📰",
+     "url": "https://anzeigen.mainpost.de/category/immobilien/vermietungen/",
+     "kind": "regular", "collection": "website", "note": "Check location and whole-apartment availability."},
+    {"id": "wunderflats", "name": "Wunderflats", "icon": "🛋️", "url": "https://wunderflats.com/en",
+     "kind": "furnished", "collection": "website", "note": "Choose Würzburg. Check service fees and minimum stay."},
+    {"id": "housinganywhere", "name": "HousingAnywhere", "icon": "🌐",
+     "url": "https://housinganywhere.com/it/s/W%C3%BCrzburg--Germania/appartamenti-ammobiliati",
+     "kind": "furnished", "collection": "website", "note": "Select whole apartments and check extra charges."},
+    {"id": "hc24", "name": "HC24", "icon": "🛏️",
+     "url": f"{HC24}/de/moeblierter-wohnraum-in-wuerzburg/",
+     "kind": "furnished", "collection": "automatic", "note": "Temporary furnished apartments. Extra charges need confirmation.",
+     "searches": (("HC24 apartments", f"{HC24}/de/moeblierter-wohnraum-in-wuerzburg/"),)},
 )
+SEARCHES = tuple(search for source in SOURCES if source["collection"] == "automatic"
+                 for search in source.get("searches", ()))
+
+
+def source_catalog():
+    return [{key: value for key, value in source.items() if key != "searches"} for source in SOURCES]
+
+
 DEFAULTS = {"current_total": 1000, "budget": 850, "min_size": 30,
             "extra_costs": 60, "include_temporary": False}
 
@@ -51,8 +92,9 @@ def housing_type(listing, description=""):
                   r"\bwg[- ](?:geeignet|tauglich)\b", "", text)
     if re.search(r"\bwg[- ]?zimmer\b|\bzimmer\s+in\s+(?:einer\s+)?wg\b|"
                  r"\bwohngemeinschaft\b|\bwg\b(?![- ](?:gesucht|geeignet|tauglich))|"
-                 r"\bshared\s+(?:flat|apartment|kitchen|bathroom)\b|"
-                 r"\b(?:gemeinschafts|mitbenutzungs)(?:küche|bad)\b|"
+                 r"\bshared\s+(?:flat|apartment|kitchen|bathroom|shower|toilet)\b|"
+                 r"\b(?:gemeinschafts|mitbenutzungs)(?:küche|bad|dusche|wc)\b|"
+                 r"\b(?:küchen|bad|badezimmer|dusch|wc)[- ]?mitbenutzung\b|"
                  r"\b(?:geteilte[nrsm]?|gemeinsame[nrsm]?)\s+(?:küche|bad|badezimmer|wc)\b|"
                  r"\betagenbad\b|\b(?:bad|badezimmer)\s+auf\s+dem\s+flur\b|"
                  r"\b(?:küche|bad|badezimmer)\s+(?:zur\s+)?(?:mitbenutzung|gemeinschaftlichen\s+nutzung)\b",
@@ -67,6 +109,10 @@ def housing_type(listing, description=""):
         return "entire_apartment"
     if (listing.get("source") == "Frauenland" and url == FRAUENLAND + "/mieten/"
             and listing.get("housing_type") == "entire_apartment"):
+        return "entire_apartment"
+    if (listing.get("source") == "HC24" and listing.get("housing_type") == "entire_apartment"
+            and listing.get("private_facilities") is True
+            and re.fullmatch(re.escape(HC24) + r"/de/expose/wu\d+/", url)):
         return "entire_apartment"
     return "unknown"
 
@@ -93,6 +139,8 @@ def listing_image(container, selector, page_url):
 
 
 def parse_search(html, source_url=BASE):
+    if urlsplit(source_url).hostname == "www.hc24.de":
+        return parse_hc24_search(html)
     if urlsplit(source_url).hostname == "www.wg-frauenland.de":
         return parse_frauenland_search(html)
     if urlsplit(source_url).hostname == "www.ohne-makler.net":
@@ -143,6 +191,8 @@ def parse_search(html, source_url=BASE):
 
 
 def parse_detail(html, listing):
+    if listing.get("source") == "HC24":
+        return parse_hc24_detail(html, listing)
     if listing.get("source") == "Frauenland":
         return dict(listing)
     if listing.get("source") == "ohne-makler":
@@ -353,6 +403,119 @@ def parse_frauenland_search(html):
     return listings
 
 
+def hc24_content(html):
+    node = BeautifulSoup(html, "html.parser").select_one("script#__NEXT_DATA__")
+    try:
+        content = json.loads(node.string if node else "")["props"]["pageProps"]["pageData"]["pageContent"]
+        if not isinstance(content, dict):
+            raise ValueError
+        return content
+    except (ValueError, TypeError, KeyError):
+        raise ValueError("HC24 public listing data unavailable or changed.") from None
+
+
+def hc24_offer(data, detail=False):
+    try:
+        geo, prices, texts = data["geo"], data["prices"], data["texts"]
+        identifier = str(data["externalId"])
+        if not re.fullmatch(r"\d+", identifier) or data["agency"]["agencyShort"] != "WU":
+            return None
+        if data["propertyType"]["objectType"] != "WOHNUNG":
+            return None
+        if geo["city"] not in ("Würzburg", "Heidingsfeld"):
+            return None
+        if detail and not re.fullmatch(r"970(?:70|72|74|76|78|80|82|84)", str(geo.get("zip", ""))):
+            return None
+        if data.get("active") is False or (detail and data.get("active") is not True):
+            return None
+        inactive = data.get("inactiveSince")
+        if inactive and datetime.fromisoformat(inactive).date() <= datetime.now(timezone.utc).date():
+            return None
+        if prices.get("rentUnit", "MONTH") != "MONTH" or prices.get("currency", "EUR") != "EUR":
+            return None
+        title, rent, size = texts["headline"], prices["completeRent"], data["areas"]["squareMeters"]
+        if (not isinstance(title, str) or not title.strip() or any(
+                isinstance(value, bool) or not isinstance(value, (int, float))
+                or not math.isfinite(value) or value <= 0 for value in (rent, size))):
+            raise ValueError
+        description = " ".join(str(texts.get(key) or "") for key in
+                               ("interiorText", "interiorTextEN", "generalText", "generalTextEN"))
+        if nightly_stay(title + " " + description):
+            return None
+        kitchen = re.search(r"küche|kitchen|kitchenette", description, re.I)
+        bathroom = re.search(r"\b(?:bad|badezimmer|dusche|badewanne|bathroom|shower)\b", description, re.I)
+        private = bool(kitchen and bathroom)
+        image_url = None
+        for image in data.get("images", []):
+            value = image.get("imageLink", "")
+            if isinstance(value, str) and re.fullmatch(r"hcwu/" + identifier + r"_\d+\.jpg", value, re.I):
+                image_url = "https://hc24-media-new.s3.eu-central-1.amazonaws.com/" + value
+                break
+        administration = data["administrationInformation"]
+        row = {"id": "hc24:wu" + identifier, "source": "HC24", "title": title.strip(),
+               "url": HC24 + "/de/expose/wu" + identifier + "/", "location": geo["city"],
+               "rent": rent, "search_rent": rent, "size": size,
+               "available": administration.get("availableFrom") or "Not listed",
+               "temporary": True, "rent_basis": "advertised; charges need confirmation",
+               "base_rent": None, "service_costs": None, "other_costs": None, "deposit": None,
+               "details_checked": detail, "housing_checked": detail,
+               "monthly_charges_known": False, "private_facilities": private,
+               "housing_type": "entire_apartment" if private else "unknown", "image_url": image_url,
+               "source_note": "Temporary furnished rental. Confirm extra charges and minimum stay."}
+        row["housing_type"] = housing_type(row, description)
+        minimum = administration.get("minDays")
+        row["minimum_stay_days"] = minimum if isinstance(minimum, int) and not isinstance(minimum, bool) and minimum > 0 else None
+        for key, field in (("included_costs", "includedServicesTextDeu"),
+                           ("additional_costs", "additionalCostsTextDeu")):
+            value = prices.get(field)
+            if value is not None and not isinstance(value, str):
+                raise ValueError
+            row[key] = value or None
+        row["one_time_fees"] = None
+        if detail:
+            deposit = prices.get("deposit")
+            if isinstance(deposit, (int, float)) and not isinstance(deposit, bool) and math.isfinite(deposit) and deposit >= 0:
+                row["deposit"] = deposit
+            if administration.get("availableTo"):
+                row["available"] += " → " + administration["availableTo"]
+        return row
+    except (KeyError, TypeError, AttributeError, ValueError):
+        raise ValueError("HC24 apartment fields unavailable or changed.") from None
+
+
+def parse_hc24_search(html):
+    try:
+        features = hc24_content(html)["mapData"]["response"]["properties"]["features"]
+        if not isinstance(features, list):
+            raise ValueError
+        rows = [row for feature in features if (row := hc24_offer(feature["properties"])) is not None]
+        if len({row["id"] for row in rows}) != len(rows):
+            raise ValueError
+        return rows
+    except (KeyError, TypeError, ValueError):
+        raise ValueError("HC24 apartment search unavailable or changed.") from None
+
+
+def parse_hc24_detail(html, listing):
+    try:
+        properties = hc24_content(html)["propertyDetailPageData"]["properties"]
+        if not isinstance(properties, list) or len(properties) != 1:
+            raise ValueError
+        data = properties[0]
+        expected = "hc24:wu" + str(data["externalId"])
+        if listing["id"] != expected or listing["url"] != HC24 + "/de/expose/wu" + str(data["externalId"]) + "/":
+            raise ValueError
+        row = hc24_offer(data, detail=True)
+        if row is None:
+            return dict(listing, housing_type="unknown", private_facilities=False,
+                        housing_checked=True, details_checked=True)
+        row["search_rent"] = listing.get("search_rent", listing["rent"])
+        row["image_url"] = row["image_url"] or listing.get("image_url")
+        return dict(listing, **row)
+    except (KeyError, TypeError, ValueError):
+        raise ValueError("HC24 apartment detail unavailable or changed.") from None
+
+
 def evaluate(rows, settings):
     rows = [row for row in rows if housing_type(row) == "entire_apartment"]
     for row in rows:
@@ -463,18 +626,20 @@ class Collector:
             checked = 0
             for listing in prioritized:
                 old = previous.get(listing["id"])
-                if old and housing_type(old) in ("shared", "non_residential"):
-                    listing["housing_type"] = housing_type(old)
                 if old and not listing.get("image_url"):
                     listing["image_url"] = old.get("image_url")
                 if (not listing["details_checked"] and old and old["details_checked"] and old.get("housing_checked")
-                        and old.get("monthly_charges_known", True)
+                        and (old.get("monthly_charges_known", True) or listing.get("source") == "HC24")
                         and old.get("search_rent", old["rent"]) == listing["rent"]):
                     for key in ("rent", "rent_basis", "base_rent", "service_costs", "other_costs", "deposit", "details_checked", "housing_checked"):
                         listing[key] = old[key]
-                    for key in ("parking_costs", "monthly_charges_known"):
-                        if key in old:
+                    for key in ("parking_costs", "monthly_charges_known", "minimum_stay_days", "included_costs",
+                                "additional_costs", "one_time_fees", "source_note", "private_facilities"):
+                        if key in old and (not listing.get(key) or key in ("monthly_charges_known", "private_facilities")):
                             listing[key] = old[key]
+                    if (listing.get("source") == "HC24" and listing["housing_type"] == "unknown"
+                            and housing_type(old) == "entire_apartment"):
+                        listing["housing_type"] = "entire_apartment"
                     listing["temporary"] = listing["temporary"] or old["temporary"]
                     if " → " in old["available"]:
                         listing["available"] += " → " + old["available"].split(" → ", 1)[1]
@@ -485,6 +650,8 @@ class Collector:
                     except (RuntimeError, ValueError) as exc:
                         errors.append(f"Details {listing['id']}: {exc}")
                     threading.Event().wait(1)
+                if old and housing_type(old) in ("shared", "non_residential"):
+                    listing["housing_type"] = housing_type(old)
                 self.store.upsert(listing, stamp)
             if found or not errors:
                 # On partial failures, retain visibility for rows from the failed category.

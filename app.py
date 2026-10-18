@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 
 from flask import Flask, jsonify, request, send_from_directory
 
-from scout import Collector, Store, evaluate, validate_settings
+from scout import Collector, Store, evaluate, source_catalog, validate_settings
 from telegram_alerts import is_configured, notify
 
 ROOT = Path(__file__).resolve().parent
@@ -51,7 +51,7 @@ def create_app(store, collector):
                        last_check=store.get("last_check"), last_success=store.get("last_success"),
                        errors=store.get("errors", []), scanning=collector.lock.locked(),
                        telegram_connected=is_configured(), telegram_error=store.get("telegram_error"),
-                       source="WG-Gesucht and ohne-makler whole apartments in Würzburg", interval_minutes=30)
+                       source="Whole apartments in Würzburg", sources=source_catalog(), interval_minutes=30)
 
     @app.post("/api/settings")
     def settings():

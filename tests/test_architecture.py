@@ -14,7 +14,7 @@ DEPENDENCY_OWNERS = {
     "requests": {"scout.py", "telegram_alerts.py"},
 }
 APP_IMPORTS = {
-    "scout": {"Collector", "Store", "evaluate", "validate_settings"},
+    "scout": {"Collector", "Store", "evaluate", "source_catalog", "validate_settings"},
     "telegram_alerts": {"is_configured", "notify"},
 }
 

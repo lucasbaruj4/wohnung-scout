@@ -106,8 +106,21 @@ The collector reads public apartment offers from these sources:
 - WG-Gesucht's first result page for [studios](https://www.wg-gesucht.de/1-zimmer-wohnungen-in-Wuerzburg.141.1.1.0.html) and [apartments](https://www.wg-gesucht.de/wohnungen-in-Wuerzburg.141.2.1.0.html).
 - [Ohne-makler whole apartments in Würzburg city](https://www.ohne-makler.net/immobilien/wohnung-mieten/bayern/kreis-wuerzburg-stadt/).
 - [Frauenland cooperative apartments](https://www.wg-frauenland.de/mieten/), including the advertised rent breakdown and planned availability. Membership is required. Unquoted cooperative share costs remain unknown, separate from the deposit. The cooperative's name does not mean shared-flat accommodation.
+- [HC24 furnished apartments in Würzburg](https://www.hc24.de/de/moeblierter-wohnraum-in-wuerzburg/), using data embedded in public result and detail pages. These are temporary lets. Advertised rent does not confirm all utilities. Unconfirmed charges prevent matches and alerts. Detail views show published minimum stays and additional costs when available.
 
-Nearby towns are excluded from the ohne-makler and Frauenland samples. IDs include the source where needed to prevent collisions. It does not cover every portal or every result page. These are asking rents, not signed leases, and this is not a representative statistical survey. Explicitly named overnight/nightly stays are excluded. Temporary lets are excluded from market statistics and alerts by default. Some temporary lets may remain unidentified until their detail pages are checked.
+The dashboard's **Sources** dialog shows all eleven providers with icons. Four providers have automatic collection support in this branch. Seven more open their websites for a manual search:
+
+- [ImmoScout24](https://www.immobilienscout24.de/Suche/de/bayern/wuerzburg/wohnung-mieten) presents a robot challenge to the collector.
+- [Kleinanzeigen](https://www.kleinanzeigen.de/s-wohnung-mieten/c203l7667) requires written consent for automated collection under its [terms](https://themen.kleinanzeigen.de/nutzungsbedingungen/).
+- [Immowelt](https://www.immowelt.de/suche/mieten/wohnung/bayern/wurzburg-97070/ad08de7873) blocks detail requests, so complete collection is unverified.
+- [Stadtbau Würzburg](https://stadtbau-wuerzburg.de/wohnungssuche/) provides its offers through an Immomio consent form.
+- [Main-Post rentals](https://anzeigen.mainpost.de/category/immobilien/vermietungen/) has no readable result cards in the initial public HTML. The collector does not call its blocked backing API.
+- [Wunderflats](https://wunderflats.com/en) opens its search homepage. Choose Würzburg there; no public city feed was confirmed.
+- [HousingAnywhere](https://housinganywhere.com/it/s/W%C3%BCrzburg--Germania/appartamenti-ammobiliati) blocks collector requests. Its apartment search can also include nearby towns.
+
+Website searches do not add listings to comparisons, storage, or alerts. Their pages can include rooms or shared facilities. Confirm the apartment type on the original website. `SOURCES` in `scout.py` owns the names, icons, links, and collection modes. `SEARCHES` is derived only from automatic sources. The state API exposes a public catalog without internal collection settings.
+
+Nearby towns are excluded from the ohne-makler, Frauenland, and HC24 samples. IDs include the source where needed to prevent collisions. It does not cover every portal or every result page. These are asking rents, not signed leases, and this is not a representative statistical survey. Explicitly named overnight/nightly stays are excluded. Temporary lets are excluded from market statistics and alerts by default. Some temporary lets may remain unidentified until their detail pages are checked.
 
 Listing records retain a photo URL from public listing cards or detail galleries when available. Missing photos remain unknown. The dashboard displays those provider-hosted images. Photos are never copied into Git.
 Frauenland currently publishes drawings and floor plans rather than apartment photos. Those images are not shown as photos.

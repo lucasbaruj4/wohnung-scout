@@ -226,6 +226,26 @@ class ScoutTests(unittest.TestCase):
             validate_settings(DEFAULTS | {"budget": float("nan")})
         self.assertEqual(client.post("/api/settings", json=DEFAULTS | {"min_size": -1}).status_code, 400)
 
+    def test_state_exposes_all_sources_without_collecting_or_changing_history(self):
+        self.store.upsert(parse_search(SEARCH)[0], "first")
+        self.store.status("123", "saved")
+        self.store.notified("123")
+        collector = Collector(self.store)
+        before = self.store.rows()
+        with patch.object(collector, "fetch") as fetch:
+            response = create_app(self.store, collector).test_client().get("/api/state")
+        self.assertEqual(response.status_code, 200)
+        sources = response.json["sources"]
+        self.assertEqual({source["name"] for source in sources}, {
+            "WG-Gesucht", "ohne-makler", "Frauenland", "ImmoScout24", "Kleinanzeigen",
+            "Immowelt", "Stadtbau Würzburg", "Main-Post", "Wunderflats", "HousingAnywhere", "HC24",
+        })
+        self.assertEqual(sum(source["collection"] == "automatic" for source in sources), 4)
+        self.assertTrue(all(source["icon"] and source["url"].startswith("https://") for source in sources))
+        self.assertTrue(all("searches" not in source for source in sources))
+        fetch.assert_not_called()
+        self.assertEqual(self.store.rows(), before)
+
     def test_telegram_errors_never_disclose_token(self):
         token = "123:" + "a" * 30
         with patch("telegram_alerts.requests.post", side_effect=requests.ConnectionError(token)):
