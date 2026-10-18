@@ -76,6 +76,8 @@ systemctl --user daemon-reload
 
 - B1 comparison table with large listing photos, monthly estimates, and apartment size.
 - Select a title to expand costs, the original listing, Save, and Hide.
+- Switch between Within my limits and Go crazy. Go crazy shows current apartments outside your limits, including unconfirmed charges and temporary lets excluded by your settings.
+- Open Saved to compare saved apartments, including older offers and homes outside your limits. Hidden remains available for restoring offers.
 - “Good value”: at least 10% lower rent/m² than the median of at least three other currently sampled, non-temporary listings within ±25% of its size. This compares price and size only, not condition, location, or included utilities.
 - Editable budget, minimum size, current total cost, and extra-cost reserve.
 - Saved and hidden listings persist across checks. No automated landlord contact or applications.
@@ -125,7 +127,7 @@ Nearby towns are excluded from the ohne-makler, Frauenland, and HC24 samples. ID
 Listing records retain a photo URL from public listing cards or detail galleries when available. Missing photos remain unknown. The dashboard displays those provider-hosted images. Photos are never copied into Git.
 Frauenland currently publishes drawings and floor plans rather than apartment photos. Those images are not shown as photos.
 
-Ohne-makler search prices have unknown charges until detail enrichment. Detail pages separate cold rent, charges, deposit, and parking. The estimate adds known rent and charges plus your reserve. Parking inclusion needs confirmation. Offers with unknown service or heating charges appear under All current apartments but cannot match or trigger an alert. Unknown charges never become zero-cost claims.
+Ohne-makler search prices have unknown charges until detail enrichment. Detail pages separate cold rent, charges, deposit, and parking. The estimate adds known rent and charges plus your reserve. Parking inclusion needs confirmation. Offers with unknown service or heating charges appear under Go crazy but cannot match or trigger an alert. Unknown charges never become zero-cost claims.
 
 Each scan enriches at most 12 previously unchecked listings, prioritizing affordable homes, with a one-second gap between detail requests. The details show advertised total rent, base rent, service charges, other costs, deposit, and fixed end dates when available. No authentication, CAPTCHA bypass, or private API is used. Blocks, network failures, and layout changes are reported, and existing data is retained. Respect the provider’s terms and access controls; pause the collector if automated access is disallowed. Do not increase the polling rate.
 
